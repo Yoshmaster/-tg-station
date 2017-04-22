@@ -4,7 +4,8 @@
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "ladder11"
 	var/id = null
-	var/height = 0							//the 'height' of the ladder. higher numbers are considered physically higher
+	var/height = 0 //the 'height' of the ladder. higher numbers are considered physically higher
+	var/special = 0 //special ladders can have their height manually set
 	var/obj/structure/ladder/down = null	//the ladder below this one
 	var/obj/structure/ladder/up = null		//the ladder above this one
 
@@ -15,6 +16,8 @@
 
 /obj/structure/ladder/Initialize(mapload)
 	if(!initialized)
+		if(!special || !height)
+			height= src.z
 		GLOB.ladders += src
 		..()
 	if(mapload)
@@ -22,12 +25,13 @@
 	update_link()
 
 /obj/structure/ladder/Destroy()
+	update_link()
 	GLOB.ladders -= src
 	. = ..()
 
 /obj/structure/ladder/proc/update_link()
 	for(var/obj/structure/ladder/L in GLOB.ladders)
-		if(L.id == id)
+		if(L.x == x && L.y == y)
 			if(L.height == (height - 1))
 				down = L
 				continue
