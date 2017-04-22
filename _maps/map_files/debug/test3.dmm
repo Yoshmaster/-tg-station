@@ -1,11 +1,20 @@
 "a" = (/turf/open/outside,/area/space)
 "b" = (/turf/closed/wall,/area/space)
 "c" = (/turf/open/floor/wood,/area/space)
-"d" = (/obj/structure/ladder,/turf/open/floor/wood,/area/space)
-"e" = (/turf/open/hole/outside,/area/space)
-"f" = (/turf/open/hole,/area/space)
-"g" = (/turf/open/floor/plasteel,/area/space)
-"h" = (/obj/structure/ladder,/turf/open/outside,/area/space)
+"d" = (/turf/open/stairs/moving/northup,/area/space)
+"e" = (/turf/open/stairs/north,/area/space)
+"f" = (/obj/structure/ladder,/turf/open/floor/wood,/area/space)
+"g" = (/turf/open/hole/outside,/area/space)
+"h" = (/turf/open/hole,/area/space)
+"i" = (/turf/open/stairs/moving/westup,/area/space)
+"j" = (/turf/open/stairs/west,/area/space)
+"k" = (/turf/open/stairs/moving/northdown,/area/space)
+"l" = (/turf/open/stairs/south,/area/space)
+"m" = (/turf/open/stairs/moving/westdown,/area/space)
+"n" = (/turf/open/stairs/moving/southup,/area/space)
+"o" = (/turf/open/stairs/moving/southdown,/area/space)
+"p" = (/turf/open/floor/plasteel,/area/space)
+"q" = (/obj/structure/ladder,/turf/open/outside,/area/space)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -22,11 +31,11 @@ aabccccccccccccbaaaaaaaaaa
 aabccccccccccccbaaaaaaaaaa
 aabccccccccccccbaaaaaaaaaa
 aabccccccccccccbaaaaaaaaaa
-aabccccccccccccbaaaaaaaaaa
-aabccccccccccccbaaaaaaaaaa
-aabccccccccccccbaaaaaaaaaa
-aabccccccccccccbaaaaaaaaaa
-aabccccdcccccccbaaaaaaaaaa
+aabcccccccbbbbbbaaaaaaaaaa
+aabcccccccbdddbbaaaaaaaaaa
+aabcccccccbeeebbaaaaaaaaaa
+aabcccccccbeeebbaaaaaaaaaa
+aabccccfcccccccbaaaaaaaaaa
 aabbccbbbbbbbbbbaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -37,90 +46,90 @@ aaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
 
 (1,1,2) = {"
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eebcccccccccccbbeeeeeeeeee
-eebccccccccccccceeeeeeeeee
-eeccdcccfffccccceeeeeeeeee
-eeccccccfffccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eebccccdcccccccbeeeeeeeeee
-eebbccccccccccbbeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+ggbcccccccccccbbgggggggggg
+ggbcccccccccccccgggggggggg
+ggccfccchhhcccccgggggggggg
+ggcccccchhhcccccgggggggggg
+ggccccccccccccccgggggggggg
+ggccccccccccccccgggggggggg
+ggcccbbbccbeeebcgggggggggg
+ggcccbijccbeeebcgggggggggg
+ggcccbijccbkkkbcgggggggggg
+ggcccbbbccbbbbbcgggggggggg
+ggccccccccccccccgggggggggg
+ggbccccfcccccccbgggggggggg
+ggbbccccccccccbbgggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
 "}
 
 (1,1,3) = {"
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eebbccccccccccbbeeeeeeeeee
-eebccccfffffcccbeeeeeeeeee
-eeccdccfffffcccceeeeeeeeee
-eecccccfffffcccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eebccccccccccccbeeeeeeeeee
-eebbccccccccccbbeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+ggbbccccccccccbbgggggggggg
+ggbcccchhhhhcccbgggggggggg
+ggccfcchhhhhccccgggggggggg
+ggccccchhhhhccccgggggggggg
+ggccccccccccccccgggggggggg
+ggccccccccccccccgggggggggg
+ggcccbbbcblbccccgggggggggg
+ggcccjmbcbnbccccgggggggggg
+ggcccjmbcbbbccccgggggggggg
+ggcccbbbccccccccgggggggggg
+ggccccccccccccccgggggggggg
+ggbccccccccccccbgggggggggg
+ggbbccccccccccbbgggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
 "}
 
 (1,1,4) = {"
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eebbccccccccccbbeeeeeeeeee
-eebcccfffffffccbeeeeeeeeee
-eeccdcfffffffccceeeeeeeeee
-eeccccfffffffccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eecccccccccccccceeeeeeeeee
-eebccccccccccccbeeeeeeeeee
-eebbccccccccccbbeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
-eeeeeeeeeeeeeeeeeeeeeeeeee
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+ggbbccccccccccbbgggggggggg
+ggbccchhhhhhhccbgggggggggg
+ggccfchhhhhhhcccgggggggggg
+ggcccchhhhhhhcccgggggggggg
+ggccccccccccccccgggggggggg
+ggccccccccccccccgggggggggg
+ggcccccccbbbccccgggggggggg
+ggcccccccbobccccgggggggggg
+ggcccccccblbccccgggggggggg
+ggccccccccccccccgggggggggg
+ggccccccccccccccgggggggggg
+ggbccccccccccccbgggggggggg
+ggbbccccccccccbbgggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
+gggggggggggggggggggggggggg
 "}
 
 (1,1,5) = {"
@@ -132,19 +141,19 @@ aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaggggggaaaaaaaaaaaaaa
-aaaaaagaaaaaaaaaaaaaaaaaaa
-aaaaaagaaaaaaaaaaaaaaaaaaa
-aaaaaagaaaaaaaaaaaaaaaaaaa
-aaaaaagaaaaaaaaaaaaaaaaaaa
-aaaaaaggggggaaaaaaaaaaaaaa
-aaaaaaaaaaaggaaaaaaaaaaaaa
-aaaaaaaaaaaagaaaaaaaaaaaaa
-aaaaaaaaaaaagaaaaaaaaaaaaa
-haaaaaaaaaagaaaaaaaaaaaaaa
-aaaaaaaaaaggaaaaaaaaaaaaaa
-haaaggaagggaaaaaaaaaaaaaaa
-aaaaagggaaaaaaaaaaaaaaaaaa
+aaaaaappppppaaaaaaaaaaaaaa
+aaaaaapaaaaaaaaaaaaaaaaaaa
+aaaaaapaaaaaaaaaaaaaaaaaaa
+aaaaaapaaaaaaaaaaaaaaaaaaa
+aaaaaapaaaaaaaaaaaaaaaaaaa
+aaaaaappppppaaaaaaaaaaaaaa
+aaaaaaaaaaappaaaaaaaaaaaaa
+aaaaaaaaaaaapaaaaaaaaaaaaa
+aaaaaaaaaaaapaaaaaaaaaaaaa
+qaaaaaaaaaapaaaaaaaaaaaaaa
+aaaaaaaaaappaaaaaaaaaaaaaa
+qaaappaapppaaaaaaaaaaaaaaa
+aaaaapppaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -161,17 +170,17 @@ aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaagaaaaaaaaaaaaaaa
-aaaaaaaaaggaaaaaaaaaaaaaaa
-aaaaaaaaagaaaaaaaaaaaaaaaa
-aaaaaaaagaaaaaaaaaaaaaaaaa
-aaaaaaaggaaaaaaaaaaaaaaaaa
-aaaaaaagggaaaaaaaaaaaaaaaa
-aaaaaaagaggaaaaaaaaaaaaaaa
-haaaaaagaagaaaaaaaaaaaaaaa
-aaaaaaagaagaaaaaaaaaaaaaaa
-haaaaaagaggaaaaaaaaaaaaaaa
-aaaaaaaggaaaaaaaaaaaaaaaaa
+aaaaaaaaaapaaaaaaaaaaaaaaa
+aaaaaaaaappaaaaaaaaaaaaaaa
+aaaaaaaaapaaaaaaaaaaaaaaaa
+aaaaaaaapaaaaaaaaaaaaaaaaa
+aaaaaaappaaaaaaaaaaaaaaaaa
+aaaaaaapppaaaaaaaaaaaaaaaa
+aaaaaaapappaaaaaaaaaaaaaaa
+qaaaaaapaapaaaaaaaaaaaaaaa
+aaaaaaapaapaaaaaaaaaaaaaaa
+qaaaaaapappaaaaaaaaaaaaaaa
+aaaaaaappaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -191,18 +200,18 @@ aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaagaaaaaaaagaaaaaaaaaa
-aaaaaaggggggggggaaaaaaaaaa
-aaaaaaaaaaaaaaggaaaaaaaaaa
-aaaaaaaaaaaaaagaaaaaaaaaaa
-aaaaaaaaaaaaaagaaaaaaaaaaa
-aaaaaaaaaaaaagaaaaaaaaaaaa
-haaaaaaagggaagaaaaaaaaaaaa
-aaaaaaaaaaggggaaaaaaaaaaaa
-aaaaaaaaaaagaaaaaaaaaaaaaa
-aaaaaaaaaaggaaaaaaaaaaaaaa
-aaaaaaaaaggaaaaaaaaaaaaaaa
-aaaaaaaaagaaaaaaaaaaaaaaaa
+aaaaaapaaaaaaaapaaaaaaaaaa
+aaaaaappppppppppaaaaaaaaaa
+aaaaaaaaaaaaaappaaaaaaaaaa
+aaaaaaaaaaaaaapaaaaaaaaaaa
+aaaaaaaaaaaaaapaaaaaaaaaaa
+aaaaaaaaaaaaapaaaaaaaaaaaa
+qaaaaaaapppaapaaaaaaaaaaaa
+aaaaaaaaaappppaaaaaaaaaaaa
+aaaaaaaaaaapaaaaaaaaaaaaaa
+aaaaaaaaaappaaaaaaaaaaaaaa
+aaaaaaaaappaaaaaaaaaaaaaaa
+aaaaaaaaapaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaa

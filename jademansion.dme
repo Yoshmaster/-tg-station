@@ -937,6 +937,7 @@
 #include "code\game\turfs\turf.dm"
 #include "code\game\turfs\outside\holes.dm"
 #include "code\game\turfs\outside\outside.dm"
+#include "code\game\turfs\outside\stairs.dm"
 #include "code\game\turfs\simulated\chasm.dm"
 #include "code\game\turfs\simulated\dirtystation.dm"
 #include "code\game\turfs\simulated\floor.dm"
