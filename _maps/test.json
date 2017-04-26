@@ -2,6 +2,8 @@
     "map_name": "Runtime Station",
     "map_path": "map_files/debug",
     "map_file": "test3.dmm",
+    "adminzone": "runtimestation.dmm"
+    "zlevels": "7"
     "minetype": "lavaland",
     "transition_config": "default"
 }

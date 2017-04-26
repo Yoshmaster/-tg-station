@@ -35,16 +35,14 @@ SUBSYSTEM_DEF(mapping)
 	SortAreas()
 	process_teleport_locs()			//Sets up the wizard teleport locations
 	preloadTemplates()
-	// Pick a random away mission.
+	/* Pick a random away mission.
 	createRandomZlevel()
-	// Generate mining.
 
 	var/mining_type = config.minetype
 	if (mining_type == "lavaland")
 		seedRuins(list(5), global.config.lavaland_budget, /area/lavaland/surface/outdoors, lava_ruins_templates)
 		spawn_rivers()
 
-	// deep space ruins
 	var/space_zlevels = list()
 	for(var/i in ZLEVEL_SPACEMIN to ZLEVEL_SPACEMAX)
 		switch(i)
@@ -55,11 +53,10 @@ SUBSYSTEM_DEF(mapping)
 
 	seedRuins(space_zlevels, global.config.space_budget, /area/space, space_ruins_templates)
 
-	// Set up Z-level transistions.
 	setup_map_transitions()
 	..()
 
-/* Nuke threats, for making the blue tiles on the station go RED
+   Nuke threats, for making the blue tiles on the station go RED
    Used by the AI doomsday and the self destruct nuke.
 */
 
@@ -101,10 +98,10 @@ SUBSYSTEM_DEF(mapping)
 	if(last)
 		QDEL_NULL(loader)
 
-/datum/controller/subsystem/mapping/proc/CreateSpace(MaxZLevel)
+/*/datum/controller/subsystem/mapping/proc/CreateSpace(MaxZLevel)
 	while(world.maxz < MaxZLevel)
 		++world.maxz
-		CHECK_TICK
+		CHECK_TICK */
 
 #define INIT_ANNOUNCE(X) to_chat(world, "<span class='boldannounce'>[X]</span>"); log_world(X)
 /datum/controller/subsystem/mapping/proc/loadWorld()
@@ -115,13 +112,15 @@ SUBSYSTEM_DEF(mapping)
 
 	INIT_ANNOUNCE("Loading [config.map_name]...")
 	TryLoadZ(config.GetFullMapPath(), FailedZs, ZLEVEL_STATION)
+	TryLoadZ(config.GetAdminPath(), FailedZs, 8)
+
 	INIT_ANNOUNCE("Loaded station in [(REALTIMEOFDAY - start_time)/10]s!")
 	feedback_add_details("map_name", config.map_name)
 
 	if(config.minetype != "lavaland")
 		INIT_ANNOUNCE("WARNING: A map without lavaland set as it's minetype was loaded! This is being ignored! Update the maploader code!")
 
-	CreateSpace(ZLEVEL_SPACEMAX)
+	//CreateSpace(ZLEVEL_SPACEMAX)
 
 	if(LAZYLEN(FailedZs))	//but seriously, unless the server's filesystem is messed up this will never happen
 		var/msg = "RED ALERT! The following map files failed to load: [FailedZs[1]]"

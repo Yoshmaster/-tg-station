@@ -4,10 +4,11 @@
 //  -Cyberboss
 
 /datum/map_config
-    var/config_filename = "_maps/tgstation2.json"
-    var/map_name = "Box Station"
-    var/map_path = "map_files/TgStation"
-    var/map_file = "tgstation.2.1.3.dmm"
+    var/config_filename = "_maps/jademansion.json"
+    var/map_name = "Jade Mansion"
+    var/map_path = "map_files/jademansion"
+    var/map_file = "jademansion.dmm"
+    var/adminzone = "jadeadmin.dmm"
 
     var/minetype = "lavaland"
 
@@ -44,12 +45,12 @@
     if(!json)
         log_world("Could not open map_config: [filename]")
         return
-    
+
     json = file2text(json)
     if(!json)
         log_world("map_config is not text: [filename]")
         return
-    
+
     json = json_decode(json)
     if(!json)
         log_world("map_config is not json: [filename]")
@@ -58,13 +59,13 @@
     if(!ValidateJSON(json))
         log_world("map_config failed to validate for above reason: [filename]")
         return
-    
+
     config_filename = filename
 
     map_name = json["map_name"]
     map_path = json["map_path"]
     map_file = json["map_file"]
-
+    adminzone = json["adminzone"]
     minetype = json["minetype"]
 
     var/list/jtcl = json["transition_config"]
@@ -74,7 +75,7 @@
 
         for(var/I in jtcl)
             transition_config[TransitionStringToEnum(I)] = TransitionStringToEnum(jtcl[I])
-        
+
     defaulted = FALSE
 
 #define CHECK_EXISTS(X) if(!istext(json[X])) { log_world(X + "missing from json!"); return; }
@@ -84,6 +85,7 @@
     CHECK_EXISTS("map_file")
     CHECK_EXISTS("minetype")
     CHECK_EXISTS("transition_config")
+    CHECK_EXISTS("adminzone")
 
     var/path = GetFullMapPath(json["map_path"], json["map_file"])
     if(!fexists(path))
@@ -92,7 +94,7 @@
 
     if(json["transition_config"] != "default")
         if(!islist(json["transition_config"]))
-            log_world("transition_config is not a list!") 
+            log_world("transition_config is not a list!")
             return
 
         var/list/jtcl = json["transition_config"]
@@ -138,6 +140,8 @@
 
 /datum/map_config/proc/GetFullMapPath(mp = map_path, mf = map_file)
     return "_maps/[mp]/[mf]"
+/datum/map_config/proc/GetAdminPath(mp = map_path, mf = adminzone)
+	return "_maps/[mp]/[mf]"
 
 /datum/map_config/proc/MakeNextMap()
     return config_filename == "data/next_map.json" || fcopy(config_filename, "data/next_map.json")
