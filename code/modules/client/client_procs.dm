@@ -197,7 +197,7 @@ GLOBAL_LIST(external_rsc_urls)
 	var/alert_mob_dupe_login = FALSE
 	if(config.log_access)
 		for(var/I in GLOB.clients)
-			if(I == src)
+			if(!I || I == src)
 				continue
 			var/client/C = I
 			if(C.key && (C.key != key) )
@@ -270,13 +270,13 @@ GLOBAL_LIST(external_rsc_urls)
 	set_client_age_from_db()
 	var/cached_player_age = player_age //we have to cache this because other shit may change it and we need it's current value now down below.
 	if (isnum(cached_player_age) && cached_player_age == -1) //first connection
-		player_age = 0	
+		player_age = 0
 	if(!IsGuestKey(key) && SSdbcore.IsConnected())
 		findJoinDate()
 
 	sync_client_with_db(tdata)
-	
-	
+
+
 	if (isnum(cached_player_age) && cached_player_age == -1) //first connection
 		if (config.panic_bunker && !holder && !(ckey in GLOB.deadmins))
 			log_access("Failed Login: [key] - New account attempting to connect during panic bunker")
@@ -295,7 +295,7 @@ GLOBAL_LIST(external_rsc_urls)
 				send2irc_adminless_only("New-user", "[key_name(src)] is connecting for the first time!")
 	else if (isnum(cached_player_age) && cached_player_age < config.notify_new_player_age)
 		message_admins("New user: [key_name_admin(src)] just connected with an age of [cached_player_age] day[(player_age==1?"":"s")]")
-	
+
 	get_message_output("watchlist entry", ckey)
 	check_ip_intel()
 
@@ -340,7 +340,7 @@ GLOBAL_LIST(external_rsc_urls)
 		adminGreet(1)
 		holder.owner = null
 		GLOB.admins -= src
-	
+
 	GLOB.ahelp_tickets.ClientLogout(src)
 	GLOB.directory -= ckey
 	GLOB.clients -= src
