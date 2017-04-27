@@ -1,17 +1,4 @@
 /mob/living/gib(no_brain, no_organs, no_bodyparts)
-	var/prev_lying = lying
-	if(stat != DEAD)
-		death(1)
-
-	if(!prev_lying)
-		gib_animation()
-
-	spill_organs(no_brain, no_organs, no_bodyparts)
-
-	if(!no_bodyparts)
-		spread_bodyparts(no_brain, no_organs)
-
-	spawn_gibs(no_bodyparts)
 	qdel(src)
 
 /mob/living/proc/gib_animation()
@@ -27,13 +14,6 @@
 	return
 
 /mob/living/dust(just_ash = FALSE)
-	death(1)
-
-	if(buckled)
-		buckled.unbuckle_mob(src,force=1)
-
-	dust_animation()
-	spawn_dust(just_ash)
 	qdel(src)
 
 /mob/living/proc/dust_animation()
