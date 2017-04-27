@@ -338,13 +338,6 @@
 /obj/machinery/clonepod/proc/go_out()
 	countdown.stop()
 
-	if(mess) //Clean that mess and dump those gibs!
-		mess = FALSE
-		new /obj/effect/gibspawner/generic(loc)
-		audible_message("<span class='italics'>You hear a splat.</span>")
-		icon_state = "pod_0"
-		return
-
 	if(!occupant)
 		return
 

@@ -32,8 +32,6 @@
 			wave_type = GLOB.meteors_threatening
 		if("catastrophic")
 			wave_type = GLOB.meteors_catastrophic
-		if("meaty")
-			wave_type = GLOB.meteorsB
 		if("space dust")
 			wave_type = GLOB.meteorsC
 		else

@@ -40,7 +40,7 @@
 	name = "blood-tomato"
 	desc = "So bloody...so...very...bloody....AHHHH!!!!"
 	icon_state = "bloodtomato"
-	splat_type = /obj/effect/gibspawner/generic
+	splat_type = /obj/effect/decal/cleanable/tomato_smudge
 	filling_color = "#FF0000"
 	origin_tech = "biotech=5"
 

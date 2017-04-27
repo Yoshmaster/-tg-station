@@ -37,25 +37,6 @@
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/meat/rawcutlet/plain/human
 	tastes = list("tender meat" = 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/initialize_slice(obj/item/weapon/reagent_containers/food/snacks/meat/rawcutlet/plain/human/slice, reagents_per_slice)
-	..()
-	slice.subjectname = subjectname
-	slice.subjectjob = subjectjob
-	if(subjectname)
-		slice.name = "raw [subjectname] cutlet"
-	else if(subjectjob)
-		slice.name = "raw [subjectjob] cutlet"
-
-/obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/initialize_cooked_food(obj/item/weapon/reagent_containers/food/snacks/meat/S, cooking_efficiency)
-	..()
-	S.subjectname = subjectname
-	S.subjectjob = subjectjob
-	if(subjectname)
-		S.name = "[subjectname] meatsteak"
-	else if(subjectjob)
-		S.name = "[subjectjob] meatsteak"
-
-
 /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/slime
 	icon_state = "slimemeat"
 	desc = "Because jello wasn't offensive enough to vegans."
@@ -83,7 +64,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/plant
 	icon_state = "plantmeat"
-	desc = "All the joys of healthy eating with all the fun of cannibalism."
+	desc = "Plant or meat?"
 	filling_color = "#E9967A"
 	tastes = list("salad" = 1, "wood" = 1)
 
@@ -95,7 +76,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/fly
 	icon_state = "flymeat"
-	desc = "Nothing says tasty like maggot filled radioactive mutant flesh."
+	desc = "Probably unhealthy."
 	list_reagents = list("nutriment" = 3, "uranium" = 3)
 	tastes = list("maggots" = 1, "the inside of a reactor" = 1)
 
@@ -125,7 +106,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slab/meatproduct
 	name = "meat product"
-	desc = "A slab of station reclaimed and chemically processed meat product."
+	desc = "A slab of meat product."
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slab/monkey
 	name = "monkey meat"

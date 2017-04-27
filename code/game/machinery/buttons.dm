@@ -203,15 +203,6 @@
 	skin = "launcher"
 	device_type = /obj/item/device/assembly/control/flasher
 
-/obj/machinery/button/crematorium
-	name = "crematorium igniter"
-	desc = "Burn baby burn!"
-	icon_state = "launcher"
-	skin = "launcher"
-	device_type = /obj/item/device/assembly/control/crematorium
-	req_access = list()
-	id = 1
-
 /obj/item/wallframe/button
 	name = "button frame"
 	desc = "Used for building buttons."

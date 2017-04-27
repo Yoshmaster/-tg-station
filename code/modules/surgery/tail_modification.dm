@@ -42,7 +42,7 @@
 
 /datum/surgery/tail_attachment
 	name = "tail attachment"
-	steps = list(/datum/surgery_step/incise, /datum/surgery_step/clamp_bleeders, /datum/surgery_step/retract_skin, /datum/surgery_step/replace, /datum/surgery_step/attach_tail, /datum/surgery_step/close)
+	steps = list(/datum/surgery_step/incise, /datum/surgery_step/clamp_bleeders, /datum/surgery_step/retract_skin, /datum/surgery_step/attach_tail, /datum/surgery_step/close)
 	species = list(/mob/living/carbon/human)
 	possible_locs = list("groin")
 

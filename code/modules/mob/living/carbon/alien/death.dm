@@ -1,8 +1,4 @@
 /mob/living/carbon/alien/spawn_gibs(with_bodyparts)
-	if(with_bodyparts)
-		new /obj/effect/gibspawner/xeno(loc,viruses)
-	else
-		new /obj/effect/gibspawner/xenobodypartless(loc,viruses)
 
 /mob/living/carbon/alien/gib_animation()
 	new /obj/effect/overlay/temp/gib_animation(loc, "gibbed-a")

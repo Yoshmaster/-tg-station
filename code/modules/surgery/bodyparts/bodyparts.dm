@@ -73,20 +73,6 @@
 				return
 	..()
 
-/obj/item/bodypart/attackby(obj/item/W, mob/user, params)
-	if(W.sharpness)
-		add_fingerprint(user)
-		if(!contents.len)
-			to_chat(user, "<span class='warning'>There is nothing left inside [src]!</span>")
-			return
-		playsound(loc, 'sound/weapons/slice.ogg', 50, 1, -1)
-		user.visible_message("<span class='warning'>[user] begins to cut open [src].</span>",\
-			"<span class='notice'>You begin to cut open [src]...</span>")
-		if(do_after(user, 54, target = src))
-			drop_organs(user)
-	else
-		return ..()
-
 /obj/item/bodypart/throw_impact(atom/hit_atom)
 	..()
 	if(status != BODYPART_ROBOTIC)

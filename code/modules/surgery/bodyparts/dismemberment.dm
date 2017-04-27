@@ -5,76 +5,11 @@
 
 //Dismember a limb
 /obj/item/bodypart/proc/dismember(dam_type = BRUTE)
-	if(!owner)
-		return 0
-	var/mob/living/carbon/C = owner
-	if(!dismemberable)
-		return 0
-	if(C.status_flags & GODMODE)
-		return 0
-	if(ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if(NODISMEMBER in H.dna.species.species_traits) // species don't allow dismemberment
-			return 0
-
-	var/obj/item/bodypart/affecting = C.get_bodypart("chest")
-	affecting.receive_damage(Clamp(brute_dam/2, 15, 50), Clamp(burn_dam/2, 0, 50)) //Damage the chest based on limb's existing damage
-	C.visible_message("<span class='danger'><B>[C]'s [src.name] has been violently dismembered!</B></span>")
-	C.emote("scream")
-	drop_limb()
-
-	if(dam_type == BURN)
-		burn()
-		return 1
-	add_mob_blood(C)
-	var/turf/location = C.loc
-	if(istype(location))
-		C.add_splatter_floor(location)
-	var/direction = pick(GLOB.cardinal)
-	var/t_range = rand(2,max(throw_range/2, 2))
-	var/turf/target_turf = get_turf(src)
-	for(var/i in 1 to t_range-1)
-		var/turf/new_turf = get_step(target_turf, direction)
-		if(!new_turf)
-			break
-		target_turf = new_turf
-		if(new_turf.density)
-			break
-	throw_at(target_turf, throw_range, throw_speed)
-	return 1
+	return 0
 
 
 /obj/item/bodypart/chest/dismember()
-	if(!owner)
-		return 0
-	var/mob/living/carbon/C = owner
-	if(!dismemberable)
-		return 0
-	if(ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if(NODISMEMBER in H.dna.species.species_traits) // species don't allow dismemberment
-			return 0
-
-	var/organ_spilled = 0
-	var/turf/T = get_turf(C)
-	C.add_splatter_floor(T)
-	playsound(get_turf(C), 'sound/misc/splort.ogg', 80, 1)
-	for(var/X in C.internal_organs)
-		var/obj/item/organ/O = X
-		var/org_zone = check_zone(O.zone)
-		if(org_zone != "chest")
-			continue
-		O.Remove(C)
-		O.forceMove(T)
-		organ_spilled = 1
-	if(cavity_item)
-		cavity_item.forceMove(T)
-		cavity_item = null
-		organ_spilled = 1
-
-	if(organ_spilled)
-		C.visible_message("<span class='danger'><B>[C]'s internal organs spill out onto the floor!</B></span>")
-	return 1
+	return 0
 
 
 

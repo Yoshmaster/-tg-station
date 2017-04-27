@@ -9,7 +9,6 @@
 	faction = list("ashwalker")
 	health = 200
 	maxHealth = 200
-	loot = list(/obj/effect/gibspawner, /obj/item/device/assembly/signaler/anomaly)
 	del_on_death = 1
 	var/meat_counter
 

@@ -148,39 +148,6 @@
 /datum/food_processor_process/mob/slime/input = /mob/living/simple_animal/slime
 /datum/food_processor_process/mob/slime/output = null
 
-/datum/food_processor_process/mob/monkey/process_food(loc, what, processor)
-	var/mob/living/carbon/monkey/O = what
-	if (O.client) //grief-proof
-		O.loc = loc
-		O.visible_message("<span class='notice'>Suddenly [O] jumps out from the processor!</span>", \
-				"<span class='notice'>You jump out from the processor!</span>", \
-				"<span class='italics'>You hear chimpering.</span>")
-		return
-	var/obj/bucket = new /obj/item/weapon/reagent_containers/glass/bucket(loc)
-
-	var/datum/reagent/blood/B = new()
-	B.holder = bucket
-	B.volume = 70
-	//set reagent data
-	B.data["donor"] = O
-
-	for(var/datum/disease/D in O.viruses)
-		if(!(D.spread_flags & SPECIAL))
-			B.data["viruses"] += D.Copy()
-	if(O.has_dna())
-		B.data["blood_DNA"] = O.dna.unique_enzymes
-
-	if(O.resistances&&O.resistances.len)
-		B.data["resistances"] = O.resistances.Copy()
-	bucket.reagents.reagent_list += B
-	bucket.reagents.update_total()
-	bucket.on_reagent_change()
-	//bucket_of_blood.reagents.handle_reactions() //blood doesn't react
-	..()
-
-/datum/food_processor_process/mob/monkey/input = /mob/living/carbon/monkey
-/datum/food_processor_process/mob/monkey/output = null
-
 /obj/machinery/processor/proc/select_recipe(X)
 	for (var/Type in subtypesof(/datum/food_processor_process) - /datum/food_processor_process/mob)
 		var/datum/food_processor_process/P = new Type()
@@ -241,7 +208,7 @@
 	if(src.processing)
 		to_chat(user, "<span class='warning'>The processor is in the process of processing!</span>")
 		return 1
-	if(user.a_intent == INTENT_GRAB && user.pulling && (isslime(user.pulling) || ismonkey(user.pulling)))
+	if(user.a_intent == INTENT_GRAB && user.pulling && (isslime(user.pulling)))
 		if(user.grab_state < GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return

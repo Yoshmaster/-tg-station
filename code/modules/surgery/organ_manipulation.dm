@@ -74,22 +74,11 @@
 					"<span class='notice'>You begin to extract [B] from [target]'s [parse_zone(target_zone)]...</span>")
 			return TRUE
 		if(!organs.len)
-			to_chat(user, "<span class='notice'>There is no removeable organs in [target]'s [parse_zone(target_zone)]!</span>")
+			to_chat(user, "<span class='notice'>There is nothing to remove in [target]'s [parse_zone(target_zone)]!</span>")
 			return -1
 		else
-			for(var/obj/item/organ/O in organs)
-				O.on_find(user)
-				organs -= O
-				organs[O.name] = O
-
-			I = input("Remove which organ?", "Surgery", null, null) as null|anything in organs
-			if(I && user && target && user.Adjacent(target) && user.get_active_held_item() == tool)
-				I = organs[I]
-				if(!I) return -1
-				user.visible_message("[user] begins to extract [I] from [target]'s [parse_zone(target_zone)].",
-					"<span class='notice'>You begin to extract [I] from [target]'s [parse_zone(target_zone)]...</span>")
-			else
-				return -1
+			to_chat(user, "<span class='notice'>You cannot remove organs!</span>")
+			return -1
 
 	else if(implement_type in implements_mend)
 		current_type = "mend"

@@ -12,8 +12,6 @@ GLOBAL_LIST_INIT(meteors_threatening, list(/obj/effect/meteor/medium=4, /obj/eff
 GLOBAL_LIST_INIT(meteors_catastrophic, list(/obj/effect/meteor/medium=5, /obj/effect/meteor/big=75, \
 						  /obj/effect/meteor/flaming=10, /obj/effect/meteor/irradiated=10, /obj/effect/meteor/tunguska = 1)) //for catastrophic meteor event
 
-GLOBAL_LIST_INIT(meteorsB, list(/obj/effect/meteor/meaty=5, /obj/effect/meteor/meaty/xeno=1)) //for meaty ore event
-
 GLOBAL_LIST_INIT(meteorsC, list(/obj/effect/meteor/dust)) //for space dust event
 
 
@@ -263,55 +261,6 @@ GLOBAL_LIST_INIT(meteorsC, list(/obj/effect/meteor/dust)) //for space dust event
 	radiation_pulse(get_turf(src), 2, 5, 50, 1)
 
 //Meaty Ore
-/obj/effect/meteor/meaty
-	name = "meaty ore"
-	icon_state = "meateor"
-	desc = "Just... don't think too hard about where this thing came from."
-	hits = 2
-	heavy = 1
-	meteorsound = 'sound/effects/blobattack.ogg'
-	meteordrop = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slab/human, /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant, /obj/item/organ/heart, /obj/item/organ/lungs, /obj/item/organ/tongue, /obj/item/organ/appendix/)
-	var/meteorgibs = /obj/effect/gibspawner/generic
-	threat = 2
-
-/obj/effect/meteor/meaty/New()
-	for(var/path in meteordrop)
-		if(path == /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant)
-			meteordrop -= path
-			meteordrop += pick(subtypesof(path))
-
-	for(var/path in meteordrop)
-		if(path == /obj/item/organ/tongue)
-			meteordrop -= path
-			meteordrop += pick(typesof(path))
-	..()
-
-/obj/effect/meteor/meaty/make_debris()
-	..()
-	new meteorgibs(get_turf(src))
-
-
-/obj/effect/meteor/meaty/ram_turf(turf/T)
-	if(!isspaceturf(T))
-		new /obj/effect/decal/cleanable/blood(T)
-
-/obj/effect/meteor/meaty/Bump(atom/A)
-	A.ex_act(hitpwr)
-	get_hit()
-
-//Meaty Ore Xeno edition
-/obj/effect/meteor/meaty/xeno
-	color = "#5EFF00"
-	meteordrop = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno, /obj/item/organ/tongue/alien)
-	meteorgibs = /obj/effect/gibspawner/xeno
-
-/obj/effect/meteor/meaty/xeno/New()
-	meteordrop += subtypesof(/obj/item/organ/alien)
-	..()
-
-/obj/effect/meteor/meaty/xeno/ram_turf(turf/T)
-	if(!isspaceturf(T))
-		new /obj/effect/decal/cleanable/xenoblood(T)
 
 //Station buster Tunguska
 /obj/effect/meteor/tunguska

@@ -1,14 +1,10 @@
 /mob/living/carbon/human/gib_animation()
-	new /obj/effect/overlay/temp/gib_animation(loc, "gibbed-h")
+
 
 /mob/living/carbon/human/dust_animation()
-	new /obj/effect/overlay/temp/dust_animation(loc, "dust-h")
+
 
 /mob/living/carbon/human/spawn_gibs(with_bodyparts)
-	if(with_bodyparts)
-		new /obj/effect/gibspawner/human(loc, viruses, dna)
-	else
-		new /obj/effect/gibspawner/humanbodypartless(loc, viruses, dna)
 
 /mob/living/carbon/human/spawn_dust(just_ash = FALSE)
 	if(just_ash)

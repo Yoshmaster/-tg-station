@@ -141,16 +141,3 @@
 	sleep(50)
 	cooldown = 0
 
-
-/obj/item/device/assembly/control/crematorium
-	name = "crematorium controller"
-	desc = "An evil-looking remote controller for a crematorium."
-
-/obj/item/device/assembly/control/crematorium/activate()
-	cooldown = 1
-	for (var/obj/structure/bodycontainer/crematorium/C in GLOB.crematoriums)
-		if (C.id == id)
-			C.cremate(usr)
-
-	sleep(50)
-	cooldown = 0

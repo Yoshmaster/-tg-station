@@ -274,14 +274,6 @@
 	build_path = /obj/item/weapon/circuitboard/machine/microwave
 	category = list ("Misc. Machinery")
 
-/datum/design/board/gibber
-	name = "Machine Design (Gibber Board)"
-	desc = "The circuit board for a gibber."
-	id = "gibber"
-	req_tech = list("programming" = 2, "engineering" = 2)
-	build_path = /obj/item/weapon/circuitboard/machine/gibber
-	category = list ("Misc. Machinery")
-
 /datum/design/board/smartfridge
 	name = "Machine Design (Smartfridge Board)"
 	desc = "The circuit board for a smartfridge."
