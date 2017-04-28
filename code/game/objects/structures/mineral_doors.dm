@@ -18,10 +18,17 @@
 	max_integrity = 200
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 100, bomb = 10, bio = 100, rad = 100, fire = 50, acid = 50)
 	var/sheetType = /obj/item/stack/sheet/metal
-	var/sheetAmount = 7
+	var/sheetAmount = 10
 	var/openSound = 'sound/effects/stonedoor_openclose.ogg'
 	var/closeSound = 'sound/effects/stonedoor_openclose.ogg'
 	CanAtmosPass = ATMOS_PASS_DENSITY
+	var/haslock = 0
+	var/doorkeyid = "any"
+	var/doorlocked = 0
+	var/autoclose = 0
+	var/doorlockdifficulty  = 20
+
+
 
 /obj/structure/mineral_door/New(location)
 	..()
@@ -66,25 +73,28 @@
 		return
 	if(isliving(user))
 		var/mob/living/M = user
-		if(world.time - M.last_bumped <= 60)
+		if(REALTIMEOFDAY - M.last_bumped <= 60)
 			return //NOTE do we really need that?
 		if(M.client)
 			if(iscarbon(M))
 				var/mob/living/carbon/C = M
 				if(!C.handcuffed)
-					SwitchState()
+					SwitchState(user)
 			else
-				SwitchState()
+				SwitchState(user)
 	else if(istype(user, /obj/mecha))
-		SwitchState()
+		SwitchState(user)
 
-/obj/structure/mineral_door/proc/SwitchState()
+/obj/structure/mineral_door/proc/SwitchState(atom/user)
 	if(state)
 		Close()
 	else
-		Open()
+		Open(user)
 
-/obj/structure/mineral_door/proc/Open()
+/obj/structure/mineral_door/proc/Open(atom/user)
+	if(doorlocked)
+		to_chat(user, "<span class='notice'>The door is locked!</span>")
+		return
 	isSwitchingStates = 1
 	playsound(loc, openSound, 100, 1)
 	flick("[initial_state]opening",src)
@@ -98,6 +108,24 @@
 
 	if(close_delay != -1)
 		addtimer(CALLBACK(src, .proc/Close), close_delay)
+
+	if(autoclose)
+		heldopen()
+
+
+/obj/structure/mineral_door/proc/heldopen()
+	while(state)
+		var/people_near_door = 0
+		sleep(10)
+		for(var/mob/living/L in orange(1,src))
+			if(L.stat == CONSCIOUS)
+				people_near_door++
+		if(!people_near_door)
+			if(!isSwitchingStates && state)
+				SwitchState()
+				return
+		people_near_door = 0
+
 
 /obj/structure/mineral_door/proc/Close()
 	if(isSwitchingStates || state != 1)
@@ -122,13 +150,34 @@
 	else
 		icon_state = initial_state
 
-/obj/structure/mineral_door/attackby(obj/item/weapon/W, mob/user, params)
-	if(istype(W,/obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/digTool = W
-		to_chat(user, "<span class='notice'>You start digging the [name]...</span>")
-		if(do_after(user,digTool.digspeed*(1+round(max_integrity*0.01)), target = src) && src)
-			to_chat(user, "<span class='notice'>You finish digging.</span>")
-			deconstruct(TRUE)
+/obj/structure/mineral_door/attackby(obj/item/W, mob/user, params)
+	if(istype(W,/obj/item/doorkey))
+		var/obj/item/doorkey/DK = W
+		if(!haslock)
+			to_chat(user, "<span class='notice'>This door does not appear to be lockable.</span>")
+			return
+		if(isSwitchingStates)
+			to_chat(user, "<span class='notice'>Wait until the door has finished opening or closing.</span>")
+			return
+		if(state)
+			to_chat(user, "<span class='notice'>You cannot lock open doors. Close it first.</span>")
+			return
+		if(doorkeyid == DK.keyid || doorkeyid == "any" || DK.keyid == "master"|| istype(W,/obj/item/doorkey/lockpick))
+			if(istype(W,/obj/item/doorkey/lockpick))
+				var/obj/item/doorkey/lockpick/LP = W
+				if(!LP.attemptpicklock(src, user, doorlockdifficulty))
+					return
+			if(doorlocked)
+				to_chat(user, "<span class='notice'>You unlock the door.</span>")
+				doorlocked = 0
+			else
+				to_chat(user, "<span class='notice'>You lock the door.</span>")
+				doorlocked = 1
+			playsound(loc, 'sound/machines/DoorClick.ogg', 100, 1)
+			return
+		else
+			to_chat(user, "<span class='notice'>Your key doesn't fit into the lock.</span>")
+			return
 	else if(user.a_intent != INTENT_HARM)
 		attack_hand(user)
 	else
@@ -218,3 +267,28 @@
 	resistance_flags = FLAMMABLE
 	obj_integrity = 200
 	max_integrity = 200
+
+/obj/structure/mineral_door/wood/lock
+	haslock = 1
+	autoclose = 1
+
+/obj/structure/mineral_door/wood/lock/upstairs
+	name = "upstairs maid access wood door"
+	doorkeyid = "upstairs"
+
+/obj/structure/mineral_door/wood/lock/downstairs
+	name = "downstairs maid access wood door"
+	doorkeyid = "downstairs"
+
+/obj/structure/mineral_door/wood/lock/inbetween
+	name = "inbetween maid access wood door"
+	doorkeyid = "inbetween"
+
+/obj/structure/mineral_door/wood/lock/gardener
+	name = "gardener access wood door"
+	doorkeyid = "gardener"
+
+/obj/structure/mineral_door/wood/lock/owner
+	name = "owner access wood door"
+	doorkeyid = "owner"
+	doorlockdifficulty  = 90

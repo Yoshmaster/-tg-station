@@ -3,7 +3,7 @@
 
 /area
 	level = null
-	name = "Space"
+	name = "Outside"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "unknown"
 	layer = AREA_LAYER
