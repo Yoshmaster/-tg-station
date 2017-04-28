@@ -162,6 +162,19 @@
 		backpack_contents.Insert(1, box) // Box always takes a first slot in backpack
 		backpack_contents[box] = 1
 
+	switch(H.workuniform)
+		if(BLACKMAID1)
+			uniform = /obj/item/clothing/under/maidblack1
+		if(BLACKMAID2)
+			uniform = /obj/item/clothing/under/maidblack2
+		if(BLACKMAID3)
+			uniform = /obj/item/clothing/under/maidblack3
+		if(BLUEMAID1)
+			uniform = /obj/item/clothing/under/maidblue1
+		else
+			uniform = /obj/item/clothing/under/color/grey //PLACEHOLDER
+
+
 /datum/outfit/job/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
 		return

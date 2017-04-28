@@ -25,6 +25,7 @@
 	var/undershirt = "Nude" //Which undershirt the player wants
 	var/socks = "Nude" //Which socks the player wants
 	var/backbag = DBACKPACK		//Which backpack type the player has chosen.
+	var/workuniform = BLACKMAID1
 
 	//Equipment slots
 	var/obj/item/wear_suit = null

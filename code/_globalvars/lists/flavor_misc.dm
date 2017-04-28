@@ -50,6 +50,13 @@ GLOBAL_LIST_INIT(security_depts_prefs, list(SEC_DEPT_RANDOM, SEC_DEPT_NONE, SEC_
 #define DDUFFLEBAG "Department Dufflebag"
 GLOBAL_LIST_INIT(backbaglist, list(DBACKPACK, DSATCHEL, DDUFFLEBAG, GBACKPACK, GSATCHEL, GDUFFLEBAG, LSATCHEL))
 
+#define BLACKMAID1 "Black Maid Uniform Style 1"
+#define BLACKMAID2 "Black Maid Uniform Style 2"
+#define BLACKMAID3 "Black Maid Uniform Style 3"
+#define BLUEMAID1 "Blue Maid Uniform Style 1"
+#define BUTLER1 "Black Suit Style 1"
+GLOBAL_LIST_INIT(workuniformlist, list(BLACKMAID1, BLACKMAID2, BLACKMAID3, BLUEMAID1, BUTLER1))
+
 //Uplink spawn loc
 #define UPLINK_PDA		"PDA"
 #define UPLINK_RADIO	"Radio"
