@@ -1,15 +1,15 @@
 /*
 Captain
 */
+/*
 /datum/job/captain
-	title = "Captain"
+	title = "Head Maid"
 	flag = CAPTAIN
-	department_head = list("Centcom")
 	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "Nanotrasen officials and Space law"
+	supervisors = "the owners of the mansion"
 	selection_color = "#ccccff"
 	req_admin_notify = 1
 	minimal_player_age = 14
@@ -18,7 +18,7 @@ Captain
 
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
-
+*/
 /datum/job/captain/get_access()
 	return get_all_accesses()
 
@@ -50,7 +50,7 @@ Captain
 
 /*
 Head of Personnel
-*/
+
 /datum/job/hop
 	title = "Head of Personnel"
 	flag = HOP
@@ -93,3 +93,4 @@ Head of Personnel
 	head = /obj/item/clothing/head/hopcap
 	backpack_contents = list(/obj/item/weapon/storage/box/ids=1,\
 		/obj/item/weapon/melee/classic_baton/telescopic=1, /obj/item/device/modular_computer/tablet/preset/advanced = 1)
+*/

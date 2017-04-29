@@ -92,11 +92,6 @@
 	if(skin)
 		add_overlay(image('icons/mob/aibots.dmi', "medskin_[skin]"))
 
-	var/datum/job/doctor/J = new /datum/job/doctor
-	access_card.access += J.get_access()
-	prev_access = access_card.access
-	qdel(J)
-
 /mob/living/simple_animal/bot/medbot/bot_reset()
 	..()
 	patient = null

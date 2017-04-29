@@ -2,13 +2,13 @@
 Assistant
 */
 /datum/job/assistant
-	title = "Assistant"
+	title = "Between Maid"
 	flag = ASSISTANT
 	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = -1
 	spawn_positions = -1
-	supervisors = "absolutely everyone"
+	supervisors = "all other upstairs and downstairs maids"
 	selection_color = "#dddddd"
 	access = list()			//See /datum/job/assistant/get_access()
 	minimal_access = list()	//See /datum/job/assistant/get_access()
@@ -31,7 +31,7 @@ Assistant
 
 
 /datum/outfit/job/assistant
-	name = "Assistant"
+	name = "Between Maid"
 	jobtype = /datum/job/assistant
 
 /datum/outfit/job/assistant/pre_equip(mob/living/carbon/human/H)

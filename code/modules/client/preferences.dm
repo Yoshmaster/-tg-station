@@ -535,7 +535,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 				var/available_in_days = job.available_in_days(user.client)
 				HTML += "<font color=red>[rank]</font></td><td><font color=red> \[IN [(available_in_days)] DAYS\]</font></td></tr>"
 				continue
-			if((job_civilian_low & ASSISTANT) && (rank != "Assistant") && !jobban_isbanned(user, "Assistant"))
+			if((job_civilian_low & ASSISTANT) && (rank != "Between Maid") && !jobban_isbanned(user, "Between Maid"))
 				HTML += "<font color=orange>[rank]</font></td><td></td></tr>"
 				continue
 			if(config.enforce_human_authority && !user.client.prefs.pref_species.qualifies_for_rank(rank, user.client.prefs.features))
@@ -580,13 +580,14 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 			HTML += "<a class='white' href='?_src_=prefs;preference=job;task=setJobLevel;level=[prefUpperLevel];text=[rank]' oncontextmenu='javascript:return setJobPrefRedirect([prefLowerLevel], \"[rank]\");'>"
 
-			if(rank == "Assistant")//Assistant is special
+			if(rank == "Between Maid")//Assistant is special
 				if(job_civilian_low & ASSISTANT)
 					HTML += "<font color=green>Yes</font>"
 				else
 					HTML += "<font color=red>No</font>"
 				HTML += "</a></td></tr>"
 				continue
+
 
 			HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 			HTML += "</a></td></tr>"
@@ -685,7 +686,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 		ShowChoices(user)
 		return
 
-	if(role == "Assistant")
+	if(role == "Between Maid")
 		if(job_civilian_low & job.flag)
 			job_civilian_low &= ~job.flag
 		else

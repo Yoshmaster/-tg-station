@@ -41,9 +41,6 @@
 /mob/living/simple_animal/bot/floorbot/Initialize()
 	..()
 	update_icon()
-	var/datum/job/engineer/J = new/datum/job/engineer
-	access_card.access += J.get_access()
-	prev_access = access_card.access
 
 /mob/living/simple_animal/bot/floorbot/Process_Spacemove(movement_dir = 0)
 	return 1

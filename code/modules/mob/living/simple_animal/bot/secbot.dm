@@ -64,20 +64,11 @@
 
 /mob/living/simple_animal/bot/secbot/Initialize()
 	..()
-	icon_state = "secbot[on]"
-	spawn(3)
-		var/datum/job/detective/J = new/datum/job/detective
-		access_card.access += J.get_access()
-		prev_access = access_card.access
 
-	//SECHUD
-	var/datum/atom_hud/secsensor = GLOB.huds[DATA_HUD_SECURITY_ADVANCED]
-	secsensor.add_hud_to(src)
-
-/mob/living/simple_animal/bot/secbot/turn_on()
+/*mob/living/simple_animal/bot/secbot/turn_on()
 	..()
 	icon_state = "secbot[on]"
-
+*/
 /mob/living/simple_animal/bot/secbot/turn_off()
 	..()
 	icon_state = "secbot[on]"

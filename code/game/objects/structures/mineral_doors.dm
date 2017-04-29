@@ -280,9 +280,9 @@
 	name = "downstairs maid access wood door"
 	doorkeyid = "downstairs"
 
-/obj/structure/mineral_door/wood/lock/inbetween
-	name = "inbetween maid access wood door"
-	doorkeyid = "inbetween"
+/obj/structure/mineral_door/wood/lock/between
+	name = "between maid access wood door"
+	doorkeyid = "between"
 
 /obj/structure/mineral_door/wood/lock/gardener
 	name = "gardener access wood door"

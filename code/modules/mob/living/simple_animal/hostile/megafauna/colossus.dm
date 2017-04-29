@@ -437,9 +437,6 @@ Difficulty: Very Hard
 		var/mob/living/carbon/human/H = user
 		for(var/obj/item/W in H)
 			H.dropItemToGround(W)
-		var/datum/job/clown/C = new /datum/job/clown()
-		C.equip(H)
-		qdel(C)
 		affected_targets.Add(H)
 
 /obj/machinery/anomalous_crystal/honk/New()

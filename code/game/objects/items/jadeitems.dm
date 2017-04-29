@@ -4,6 +4,7 @@
 	desc = "A keyring with a small steel key. Only useable for general doors."
 	icon_state = "key"
 	var/keyid = "general"
+	w_class = WEIGHT_CLASS_TINY
 
 /obj/item/doorkey/upstairs
 	name = "upstairs maid key"
@@ -17,11 +18,11 @@
 	icon_state = "key_orange"
 	keyid = "downstairs"
 
-/obj/item/doorkey/inbetween
-	name = "inbetween maid key"
-	desc = "A keyring with a small steel key. Works on all general and inbetween maid doors."
+/obj/item/doorkey/between
+	name = "between maid key"
+	desc = "A keyring with a small steel key. Works on all general and between maid doors."
 	icon_state = "key_blue"
-	keyid = "inbetween"
+	keyid = "between"
 
 /obj/item/doorkey/gardener
 	name = "gardener key"

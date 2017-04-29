@@ -1,8 +1,8 @@
 
 #define ENGSEC			(1<<0)
 
-#define CAPTAIN			(1<<0)
-#define HOS				(1<<1)
+#define HEADMAID			(1<<0)
+#define MANSIONOWNER				(1<<1)
 #define WARDEN			(1<<2)
 #define DETECTIVE			(1<<3)
 #define OFFICER			(1<<4)
@@ -27,11 +27,11 @@
 
 #define CIVILIAN			(1<<2)
 
-#define HOP				(1<<0)
-#define BARTENDER			(1<<1)
-#define BOTANIST			(1<<2)
-#define COOK				(1<<3)
-#define JANITOR			(1<<4)
+#define BUTLER				(1<<0)
+#define DOWNSTAIRSMAID			(1<<1)
+#define UPSTAIRSMAID			(1<<2)
+#define GARDENER				(1<<3)
+#define GUARD			(1<<4)
 #define LIBRARIAN			(1<<5)
 #define QUARTERMASTER		(1<<6)
 #define CARGOTECH			(1<<7)

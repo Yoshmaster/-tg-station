@@ -165,12 +165,27 @@
 	switch(H.workuniform)
 		if(BLACKMAID1)
 			uniform = /obj/item/clothing/under/maidblack1
+			head = /obj/item/clothing/head/maidhead1
+			shoes = /obj/item/clothing/shoes/jackboots
+
 		if(BLACKMAID2)
 			uniform = /obj/item/clothing/under/maidblack2
+			head = /obj/item/clothing/head/maidhead1
+			shoes = /obj/item/clothing/shoes/jackboots
+
 		if(BLACKMAID3)
 			uniform = /obj/item/clothing/under/maidblack3
+			head = /obj/item/clothing/head/maidhead2
+			shoes = /obj/item/clothing/shoes/laceup
+
 		if(BLUEMAID1)
 			uniform = /obj/item/clothing/under/maidblue1
+			head = /obj/item/clothing/head/maidhead2
+			shoes = /obj/item/clothing/shoes/laceup
+		if(BUTLER1)
+
+		if(DEFAULTJOBSUIT)
+
 		else
 			uniform = /obj/item/clothing/under/color/grey //PLACEHOLDER
 

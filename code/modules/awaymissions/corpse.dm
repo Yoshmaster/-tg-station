@@ -278,12 +278,10 @@
 
 /obj/effect/mob_spawn/human/cook
 	name = "Cook"
-	outfit_type = /datum/outfit/job/cook
 
 
 /obj/effect/mob_spawn/human/doctor
 	name = "Doctor"
-	outfit_type = /datum/outfit/job/doctor
 
 
 /obj/effect/mob_spawn/human/doctor/alive
@@ -307,29 +305,22 @@
 
 /obj/effect/mob_spawn/human/engineer
 	name = "Engineer"
-	outfit_type = /datum/outfit/job/engineer
 	gloves = /obj/item/clothing/gloves/color/yellow
 
 /obj/effect/mob_spawn/human/engineer/rig
-	outfit_type = /datum/outfit/job/engineer/rig
 
 /obj/effect/mob_spawn/human/clown
 	name = "Clown"
-	outfit_type = /datum/outfit/job/clown
 
 /obj/effect/mob_spawn/human/scientist
 	name = "Scientist"
-	outfit_type = /datum/outfit/job/scientist
 
 /obj/effect/mob_spawn/human/miner
 	name = "Shaft Miner"
-	outfit_type = /datum/outfit/job/miner/asteroid
 
 /obj/effect/mob_spawn/human/miner/rig
-	outfit_type = /datum/outfit/job/miner/equipped/asteroid
 
 /obj/effect/mob_spawn/human/miner/explorer
-	outfit_type = /datum/outfit/job/miner/equipped
 
 
 /obj/effect/mob_spawn/human/plasmaman
