@@ -28,22 +28,22 @@
 	name = "Head Maid"
 	jobtype = /datum/job/headmaid
 
-	id = /obj/item/weapon/card/id/gold
-	belt = /obj/item/device/pda/captain
-	glasses = /obj/item/clothing/glasses/sunglasses
-	ears = /obj/item/device/radio/headset/heads/captain/alt
-	gloves = /obj/item/clothing/gloves/color/captain
-	uniform =  /obj/item/clothing/under/rank/captain
-	suit = /obj/item/clothing/suit/armor/vest/capcarapace
-	shoes = /obj/item/clothing/shoes/sneakers/brown
-	head = /obj/item/clothing/head/caphat
-	backpack_contents = list(/obj/item/weapon/melee/classic_baton/telescopic=1, /obj/item/station_charter=1)
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+	backpack_contents = list(/obj/item/weapon/reagent_containers/spray/largecleaner, /obj/item/weapon/reagent_containers/spray/chemsprayer/megacleaner)
+//	r_hand = a
+//	l_hand = a
+	l_pocket = /obj/item/device/laser_pointer
+	r_pocket = /obj/item/doorkey/master
 
-	backpack = /obj/item/weapon/storage/backpack/captain
-	satchel = /obj/item/weapon/storage/backpack/satchel/cap
-	dufflebag = /obj/item/weapon/storage/backpack/dufflebag/captain
-
-	implants = list(/obj/item/weapon/implant/mindshield)
+//	implants = list(/obj/item/weapon/implant/mindshield)
 
 
 //OWNER
@@ -67,14 +67,22 @@
 	name = "Mansion Owner"
 	jobtype = /datum/job/mansionowner
 
-	belt = /obj/item/device/pda/librarian
-	uniform = /obj/item/clothing/under/rank/librarian
-	l_hand = /obj/item/weapon/storage/bag/books
-	r_pocket = /obj/item/weapon/barcodescanner
-	l_pocket = /obj/item/device/laser_pointer
-	backpack_contents = list(
-		/obj/item/soapstone = 1
-	)
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+	backpack_contents = list(/obj/item/doorkey/master)
+//	r_hand = a
+//	l_hand = a
+//	l_pocket = /obj/item/device/laser_pointer
+	r_pocket = /obj/item/doorkey/owner
+
+//	implants = list(/obj/item/weapon/implant/mindshield)
 
 //Butler
 
@@ -98,51 +106,23 @@
 	name = "Butler"
 	jobtype = /datum/job/butler
 
-	glasses = /obj/item/clothing/glasses/sunglasses/reagent
-	belt = /obj/item/device/pda/bar
-	ears = /obj/item/device/radio/headset/headset_srv
-	uniform = /obj/item/clothing/under/rank/bartender
-	suit = /obj/item/clothing/suit/armor/vest
-	backpack_contents = list(/obj/item/weapon/storage/box/beanbag=1)
-	shoes = /obj/item/clothing/shoes/laceup
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+//	backpack_contents = list(a, a)
+//	r_hand = a
+//	l_hand = a
+//	l_pocket = /obj/item/device/laser_pointer
+	r_pocket = /obj/item/doorkey/
 
-// Downstairs Maid
+//	implants = list(/obj/item/weapon/implant/mindshield)
 
-/datum/job/downstairsmaid
-	title = "Downstairs Maid"
-	flag = DOWNSTAIRSMAID
-	department_flag = CIVILIAN
-	faction = "Station"
-	total_positions = 2
-	spawn_positions = 1
-	supervisors = "the headmaid"
-	selection_color = "#bbe291"
-
-	outfit = /datum/outfit/job/downstairsmaid
-
-	access = list(GLOB.access_hydroponics, GLOB.access_bar, GLOB.access_kitchen, GLOB.access_morgue)
-	minimal_access = list(GLOB.access_kitchen, GLOB.access_morgue)
-
-/datum/outfit/job/downstairsmaid
-	name = "Downstairs Maid"
-	jobtype = /datum/job/downstairsmaid
-
-	belt = /obj/item/device/pda/cook
-	ears = /obj/item/device/radio/headset/headset_srv
-	uniform = /obj/item/clothing/under/rank/chef
-	suit = /obj/item/clothing/suit/toggle/chef
-	head = /obj/item/clothing/head/chefhat
-	backpack_contents = list(/obj/item/weapon/sharpener = 1)
-
-/datum/outfit/job/downstairsmaid/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	..()
-
-/datum/outfit/job/downstairsmaid/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-    ..()
-    var/list/possible_boxes = subtypesof(/obj/item/weapon/storage/box/ingredients)
-    var/chosen_box = pick(possible_boxes)
-    var/obj/item/weapon/storage/box/I = new chosen_box(src)
-    H.equip_to_slot_or_del(I,slot_in_backpack)
 
 /*
 Gardener
@@ -170,15 +150,71 @@ Gardener
 	name = "Gardener"
 	jobtype = /datum/job/gardener
 
-	belt = /obj/item/device/pda/botanist
-	ears = /obj/item/device/radio/headset/headset_srv
-	uniform = /obj/item/clothing/under/rank/hydroponics
-	suit = /obj/item/clothing/suit/apron
-	gloves  =/obj/item/clothing/gloves/botanic_leather
-	suit_store = /obj/item/device/plant_analyzer
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+//	backpack_contents = list(a, a)
+//	r_hand = a
+//	l_hand = a
+//	l_pocket = /obj/item/device/laser_pointer
+	r_pocket = /obj/item/doorkey/gardener
 
-	backpack = /obj/item/weapon/storage/backpack/botany
-	satchel = /obj/item/weapon/storage/backpack/satchel/hyd
+//	implants = list(/obj/item/weapon/implant/mindshield)
+
+// Downstairs Maid
+
+/datum/job/downstairsmaid
+	title = "Downstairs Maid"
+	flag = DOWNSTAIRSMAID
+	department_flag = CIVILIAN
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 1
+	supervisors = "the headmaid"
+	selection_color = "#bbe291"
+
+	outfit = /datum/outfit/job/downstairsmaid
+
+	access = list(GLOB.access_hydroponics, GLOB.access_bar, GLOB.access_kitchen, GLOB.access_morgue)
+	minimal_access = list(GLOB.access_kitchen, GLOB.access_morgue)
+
+/datum/outfit/job/downstairsmaid
+	name = "Downstairs Maid"
+	jobtype = /datum/job/downstairsmaid
+
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+	backpack_contents = list(/obj/item/weapon/soap, /obj/item/weapon/kitchen/rollingpin)
+//	r_hand = a
+//	l_hand = a
+	l_pocket = /obj/item/weapon/reagent_containers/glass/rag
+	r_pocket = /obj/item/doorkey/downstairs
+
+//	implants = list(/obj/item/weapon/implant/mindshield)
+
+/datum/outfit/job/downstairsmaid/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	..()
+
+/datum/outfit/job/downstairsmaid/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+    ..()
+    var/list/possible_boxes = subtypesof(/obj/item/weapon/storage/box/ingredients)
+    var/chosen_box = pick(possible_boxes)
+    var/obj/item/weapon/storage/box/I = new chosen_box(src)
+    H.equip_to_slot_or_del(I,slot_in_backpack)
+
 
 
 /*
@@ -204,10 +240,22 @@ Upstairs Maid
 	name = "Upstairs Maid"
 	jobtype = /datum/job/upstairsmaid
 
-	belt = /obj/item/device/pda/janitor
-	ears = /obj/item/device/radio/headset/headset_srv
-	uniform = /obj/item/clothing/under/rank/janitor
-	backpack_contents = list(/obj/item/device/modular_computer/tablet/preset/advanced=1, /obj/item/soapstone/empty=1)
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+	backpack_contents = list(/obj/item/weapon/reagent_containers/glass/rag, /obj/item/weapon/soap)
+//	r_hand = a
+//	l_hand = a
+	l_pocket = /obj/item/weapon/reagent_containers/spray/regularcleaner
+	r_pocket = /obj/item/doorkey/upstairs
+
+//	implants = list(/obj/item/weapon/implant/mindshield)
 
 /*
 Guard
@@ -221,7 +269,6 @@ Guard
 	spawn_positions = 2
 	supervisors = "the owners of the mansion"
 	selection_color = "#dddddd"
-	var/lawyers = 0 //Counts lawyer amount
 
 	outfit = /datum/outfit/job/guard
 
@@ -232,11 +279,19 @@ Guard
 	name = "Guard"
 	jobtype = /datum/job/guard
 
-	belt = /obj/item/device/pda/lawyer
-	ears = /obj/item/device/radio/headset/headset_sec
-	uniform = /obj/item/clothing/under/lawyer/bluesuit
-	suit = /obj/item/clothing/suit/toggle/lawyer
-	shoes = /obj/item/clothing/shoes/laceup
-	l_hand = /obj/item/weapon/storage/briefcase/lawyer
-	l_pocket = /obj/item/device/laser_pointer
-	r_pocket = /obj/item/clothing/tie/lawyers_badge
+//	id = /obj/item/weapon/card/id/gold
+//	belt = /obj/item/device/pda/
+//	glasses = /obj/item/clothing/glasses/sunglasses
+//	ears = /obj/item/device/radio/headset/heads/captain/alt
+//	gloves = a
+//	uniform = a
+//	suit = a
+//	shoes = a
+//	head = a
+//	backpack_contents = list(a, a)
+//	r_hand = a
+//	l_hand = a
+//	l_pocket = /obj/item/device/laser_pointer
+	r_pocket = /obj/item/doorkey/
+
+//	implants = list(/obj/item/weapon/implant/mindshield)

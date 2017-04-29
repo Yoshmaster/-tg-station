@@ -61,8 +61,8 @@ GLOBAL_LIST_INIT(backbaglist, list(DBACKPACK, DSATCHEL, DDUFFLEBAG, GBACKPACK, G
 #define CASUALDRESS2 "Casual Dress Style 2"
 #define CASUALDRESS3 "Casual Dress Style 3"
 #define CASUALSUIT1 "Casual Suit Style 1"
-#define CASUALSUIT1 "Casual Suit Style 2"
-#define CASUALSUIT1 "Casual Suit Style 3"
+#define CASUALSUIT2 "Casual Suit Style 2"
+#define CASUALSUIT3 "Casual Suit Style 3"
 #define DEFAULTJOBSUIT "Use job default uniform."
 
 
