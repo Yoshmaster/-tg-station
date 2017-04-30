@@ -2,7 +2,7 @@
 	icon_state = "outside"
 	requires_power = 1
 	always_unpowered = 1
-	dynamic_lighting = DYNAMIC_LIGHTING_DISABLED
+//	dynamic_lighting = DYNAMIC_LIGHTING_DISABLED
 	power_light = 0
 	power_equip = 0
 	power_environ = 0

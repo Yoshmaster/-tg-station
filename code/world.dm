@@ -1,12 +1,12 @@
 /world
 	mob = /mob/dead/new_player
-	turf = /turf/open/outside
-	area = /area/space
+	turf = /turf/open/hole/outside
+	area = /area/outside
 	view = "15x15"
 	cache_lifespan = 7
-	hub = "Exadv1.spacestation13"
-	hub_password = "kMZy3U5jJHSiBQjr"
-	name = "/tg/ Station 13"
+	hub = ""
+	hub_password = ""
+	name = "Jade Mansion 13"
 	fps = 20
 	visibility = 0
 #ifdef GC_FAILURE_HARD_LOOKUP

@@ -72,5 +72,3 @@
 	initial_icon = "outsidedownwards"
 	initial_gas_mix = "o2=22;n2=82;TEMP=293.15"
 	planetary_atmos = TRUE
-	light_power = 5
-	light_range = 3
