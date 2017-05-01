@@ -28,3 +28,15 @@
 	smooth = SMOOTH_MORE|SMOOTH_BORDER
 	canSmoothWith = list (/turf/closed)
 	baseturf = /turf/open/outside
+
+/turf/closed/outsidepines
+	name = "pine tree"
+	icon = 'icons/turf/jadetrees.dmi'
+	icon_state = "pinetree_double"
+	opacity = 0
+
+/turf/closed/outsidepines/bottom
+	icon_state = "pinetree_bottom"
+
+/turf/closed/outsidepines/top
+	icon_state = "pinetree_top"
