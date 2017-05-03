@@ -187,17 +187,16 @@
 "dE" = (/obj/effect/turf_decal/stripes/line{dir = 1},/turf/open/floor/plasteel,/area/storage/primary)
 "dF" = (/obj/effect/turf_decal/stripes/line{dir = 5},/turf/open/floor/plasteel,/area/storage/primary)
 "dG" = (/obj/machinery/door/airlock,/turf/open/floor/plasteel,/area/storage/primary)
-"dH" = (/obj/effect/landmark/start,/turf/open/floor/plasteel,/area/storage/primary)
-"dI" = (/obj/effect/landmark/latejoin,/turf/open/floor/plasteel,/area/storage/primary)
-"dJ" = (/turf/open/floor/plasteel,/area/storage/primary)
-"dK" = (/obj/effect/turf_decal/stripes/corner{dir = 8},/turf/open/floor/plasteel,/area/construction)
-"dL" = (/obj/effect/turf_decal/stripes/line{dir = 1},/turf/open/floor/plasteel,/area/construction)
-"dM" = (/obj/effect/turf_decal/stripes/corner{dir = 4},/turf/open/floor/plasteel,/area/construction)
-"dN" = (/obj/structure/table,/turf/open/floor/plasteel,/area/storage/primary)
-"dO" = (/obj/structure/table,/obj/machinery/light,/obj/item/weapon/twohanded/fireaxe,/obj/item/weapon/extinguisher,/turf/open/floor/plasteel,/area/storage/primary)
-"dP" = (/obj/structure/table,/obj/item/device/lightreplacer,/turf/open/floor/plasteel,/area/storage/primary)
-"dQ" = (/obj/structure/table,/obj/item/weapon/storage/box/lights/mixed,/obj/item/weapon/storage/box/lights/tubes,/obj/machinery/light,/turf/open/floor/plasteel,/area/storage/primary)
-"dR" = (/obj/structure/table,/obj/item/device/flashlight{pixel_y = 5},/turf/open/floor/plasteel,/area/storage/primary)
+"dH" = (/turf/open/hole/outside,/area/storage/primary)
+"dI" = (/turf/open/floor/plasteel,/area/storage/primary)
+"dJ" = (/obj/effect/turf_decal/stripes/corner{dir = 8},/turf/open/floor/plasteel,/area/construction)
+"dK" = (/obj/effect/turf_decal/stripes/line{dir = 1},/turf/open/floor/plasteel,/area/construction)
+"dL" = (/obj/effect/turf_decal/stripes/corner{dir = 4},/turf/open/floor/plasteel,/area/construction)
+"dM" = (/obj/structure/table,/turf/open/floor/plasteel,/area/storage/primary)
+"dN" = (/obj/structure/table,/obj/machinery/light,/obj/item/weapon/twohanded/fireaxe,/obj/item/weapon/extinguisher,/turf/open/floor/plasteel,/area/storage/primary)
+"dO" = (/obj/structure/table,/obj/item/device/lightreplacer,/turf/open/floor/plasteel,/area/storage/primary)
+"dP" = (/obj/structure/table,/obj/item/weapon/storage/box/lights/mixed,/obj/item/weapon/storage/box/lights/tubes,/obj/machinery/light,/turf/open/floor/plasteel,/area/storage/primary)
+"dQ" = (/obj/structure/table,/obj/item/device/flashlight{pixel_y = 5},/turf/open/floor/plasteel,/area/storage/primary)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -233,12 +232,12 @@ aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldAdBdBdBdBdBdBdBdCdldlcS
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldldldldldldldldldldldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldDdEdEdEdEdEdEdEdFdldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzdGdldldcdHdHdHdHdHdHdHdkdldlcSafadacabaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzdGdldldcdIdIdIdIdIdIdIdkdldlcSafadacabaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzdGdldldcdHdHdHdHdHdHdHdkdldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldAdBdBdBdBdBdBdBdCdldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldldldldldldldldldldldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNdydndndndndndndndndndndzcSdldldDdEdEdEdEdEdEdEdFdldlcSafadacabaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabacadafcNdmdndndndndndndndndndndocSdpdldcdJdJdJdJdJdJdJdkdldxcSafadacabaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabacadafcNdKdLdLdLdLdLdLdLdLdLdLdMcSdldldcdNdOdNdNdPdQdRdkdldlcSafadacabaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaabacadafcNdmdndndndndndndndndndndocSdpdldcdIdIdIdIdIdIdIdkdldxcSafadacabaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaabacadafcNdJdKdKdKdKdKdKdKdKdKdKdLcSdldldcdMdNdMdMdOdPdQdkdldlcSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafcNcNcNcNcNcNcNcNcNcNcNcNcNcScScScScScScScScScScScScScScSafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafadacabaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaabacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadacabaaaaaaaaaaaaaaaa
