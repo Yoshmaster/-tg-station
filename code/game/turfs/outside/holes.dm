@@ -31,6 +31,10 @@
 		return 0
 	if(istype(AM, /obj/item/projectile) || AM.throwing)
 		return 0
+	if(AM.anchored)
+		//anchored objects shouldn't fall down
+		return 0
+
 	if(istype(AM, /obj/effect/portal))
 		//Portals aren't affected by gravity. Probably.
 		return 0

@@ -24,3 +24,12 @@
 	icon = 'icons/turf/jadefloors.dmi'
 	icon_state = "jaderoof_south"
 	name = "\proper rooftile"
+
+/turf/open/outside/roofing/east
+	icon_state = "jaderoof_east"
+
+/turf/open/outside/roofing/west
+	icon_state = "jaderoof_west"
+
+/turf/open/outside/roofing/north
+	icon_state = "jaderoof_north"
