@@ -178,16 +178,45 @@
 			head = /obj/item/clothing/head/maidhead2
 			shoes = /obj/item/clothing/shoes/laceup
 
+		if(BLACKMAID4)
+			uniform = /obj/item/clothing/under/maidblack4
+			head = /obj/item/clothing/head/maidhead1
+			shoes = /obj/item/clothing/shoes/jackboots
+
+		if(BLACKMAID5)
+			uniform = /obj/item/clothing/under/maidblack5
+			head = /obj/item/clothing/head/maidhead1
+			shoes = /obj/item/clothing/shoes/jackboots
+
 		if(BLUEMAID1)
 			uniform = /obj/item/clothing/under/maidblue1
 			head = /obj/item/clothing/head/maidhead2
 			shoes = /obj/item/clothing/shoes/laceup
+		if(BLUEMAID2)
+			uniform = /obj/item/clothing/under/maidblue2
+			head = /obj/item/clothing/head/maidhead1
+			shoes = /obj/item/clothing/shoes/laceup
+
 		if(BUTLER1)
+			uniform = /obj/item/clothing/under/suit1
+			shoes = /obj/item/clothing/shoes/laceup
+
+		if(BUTLER2)
+			uniform = /obj/item/clothing/under/suit2
+			shoes = /obj/item/clothing/shoes/laceup
+
+		if(BUTLER3)
+			uniform = /obj/item/clothing/under/suit3
+			shoes = /obj/item/clothing/shoes/laceup
+
+		if(CASUALDRESS1)
+			uniform = /obj/item/clothing/under/casualskirtblue
+			shoes = /obj/item/clothing/shoes/jackboots
 
 		if(DEFAULTJOBSUIT)
 
 		else
-			uniform = /obj/item/clothing/under/color/grey //PLACEHOLDER
+			uniform = uniform = /obj/item/clothing/under/maidblack2 //PLACEHOLDER
 
 
 /datum/outfit/job/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
