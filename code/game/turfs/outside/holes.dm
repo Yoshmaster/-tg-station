@@ -7,6 +7,7 @@
 	var/drop_x = 1
 	var/drop_y = 1
 	var/drop_z = 1
+	var/downstairshine = 1 //does this cause a downstair shine effect?
 
 /turf/open/hole/Entered(atom/movable/AM)
 	START_PROCESSING(SSobj, src)
@@ -69,6 +70,9 @@
 	var/turf/below = locate(drop_x, drop_y, drop_z)
 	if(istype(below, /turf/open/hole))
 		icon_state = "[initial_icon]2"
+	if(downstairshine)
+		if(!below.density)
+			new /obj/effect/upstairshine(below)
 
 
 /turf/open/hole/outside
@@ -76,3 +80,4 @@
 	initial_icon = "outsidedownwards"
 	initial_gas_mix = "o2=22;n2=82;TEMP=293.15"
 	planetary_atmos = TRUE
+	downstairshine = 0
