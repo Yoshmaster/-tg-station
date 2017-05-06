@@ -12,6 +12,8 @@
 	skinned_type = /obj/item/stack/sheet/animalhide/human
 
 	var/datum/action/innate/flight/fly
+	var/datum/action/innate/flight_up/fly_up
+	var/datum/action/innate/flight_down/fly_down
 
 /datum/species/harpy/on_species_gain(mob/living/carbon/human/H, datum/species/old_species)
 	..()
@@ -21,11 +23,21 @@
 	if(ishuman(H)&& !fly)
 		fly = new
 		fly.Grant(H)
+	if(ishuman(H)&& !fly_up)
+		fly_up = new
+		fly_up.Grant(H)
+	if(ishuman(H)&& !fly_down)
+		fly_down = new
+		fly_down.Grant(H)
 
 
 /datum/species/harpy/on_species_loss(mob/living/carbon/human/H)
 	if(fly)
 		fly.Remove(H)
+	if(fly_up)
+		fly_up.Remove(H)
+	if(fly_down)
+		fly_down.Remove(H)
 	if(H.movement_type & FLYING)
 		H.movement_type &= ~FLYING
 	ToggleFlight(H,0)
@@ -82,6 +94,52 @@
 			A.ToggleFlight(H,1)
 			H.update_canmove()
 
+/datum/action/innate/flight_up
+	name = "Fly Upwards"
+	check_flags = AB_CHECK_CONSCIOUS|AB_CHECK_STUNNED
+	button_icon_state = "flight_up"
+
+/datum/action/innate/flight_up/Activate()
+	var/mob/living/carbon/human/H = owner
+	if(H.movement_type & FLYING)
+		if(H.z >= JADE_MAX_MAP_Z_LEVEL)
+			to_chat(H, "<span class='notice'>You cannot fly any higher.</span>")
+			return
+		var/turf/above = locate(H.x, H.y, H.z+1)
+		if(!above)
+			return
+		if(istype(above, /turf/open/hole))
+			to_chat(H, "<span class='notice'>You fly upwards.</span>")
+			H.forceMove(above)
+		else
+			to_chat(H, "<span class='notice'>There is something above you that blocks you from ascending.</span>")
+			return
+
+/datum/action/innate/flight_down
+	name = "Fly Downwards"
+	check_flags = AB_CHECK_CONSCIOUS|AB_CHECK_STUNNED
+	button_icon_state = "flight_down"
+
+/datum/action/innate/flight_down/Activate()
+	var/mob/living/carbon/human/H = owner
+	if(H.movement_type & FLYING)
+		if(H.z <= JADE_MIN_MAP_Z_LEVEL)
+			to_chat(H, "<span class='notice'>You cannot fly any lower.</span>")
+			return
+		var/turf/below = locate(H.x, H.y, H.z)
+		var/turf/downwards = locate(H.x, H.y, H.z-1)
+
+		if(!below || !downwards)
+			return
+		if(istype(below, /turf/open/hole) && !downwards.density)
+			to_chat(H, "<span class='notice'>You fly downwards.</span>")
+			H.forceMove(downwards)
+		else
+			to_chat(H, "<span class='notice'>There is something below you that blocks you from descending.</span>")
+			return
+
+
+
 /datum/species/harpy/proc/flyslip(mob/living/carbon/human/H)
 	var/obj/buckled_obj
 	if(H.buckled)
@@ -137,3 +195,6 @@
 		override_float = 0
 		H.pass_flags &= ~PASSTABLE
 		H.CloseWings()
+		if(isturf(H.loc))
+			var/turf/below = H.loc
+			below.Entered(H)
