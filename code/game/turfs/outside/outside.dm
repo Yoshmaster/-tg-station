@@ -33,3 +33,6 @@
 
 /turf/open/outside/roofing/north
 	icon_state = "jaderoof_north"
+
+/turf/open/outside/roofing/tile
+	icon_state = "jaderoof_tile"

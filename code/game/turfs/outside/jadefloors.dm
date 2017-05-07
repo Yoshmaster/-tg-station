@@ -21,3 +21,20 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "outsidedirt"
 	name = "\proper dirt"
+
+/turf/open/tiles
+	icon = 'icons/turf/jadefloors.dmi'
+	icon_state = "wooden_tile"
+	name = "\proper tile"
+
+/turf/open/tiles/stonejadetile
+	icon_state = "stone_tile"
+
+/turf/open/tiles/redtile
+	icon_state = "red_tile"
+
+/turf/open/tiles/sandstonetile
+	icon_state = "sandstone_tile"
+
+/turf/open/tiles/woodentile
+	icon_state = "wooden_tile"
