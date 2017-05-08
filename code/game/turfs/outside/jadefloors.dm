@@ -38,3 +38,6 @@
 
 /turf/open/tiles/woodentile
 	icon_state = "wooden_tile"
+
+/turf/open/tiles/darkstonetile
+	icon_state = "darkstone_tile"
