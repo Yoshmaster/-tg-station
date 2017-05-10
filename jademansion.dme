@@ -1368,6 +1368,8 @@
 #include "code\modules\hydroponics\grown\tobacco.dm"
 #include "code\modules\hydroponics\grown\tomato.dm"
 #include "code\modules\hydroponics\grown\towercap.dm"
+#include "code\modules\jadeobjects\closets.dm"
+#include "code\modules\jadeobjects\decoration.dm"
 #include "code\modules\jadeobjects\outsidelights.dm"
 #include "code\modules\jadeobjects\randomobjects.dm"
 #include "code\modules\jobs\access.dm"

@@ -7,9 +7,12 @@
 	icon_state = "floodlight"
 	anchored = TRUE
 	density = TRUE
-	var/list/light_setting_list = list(0, 5, 10, 15)
-	var/setting = 1
+	var/list/light_setting_list = list(0, 2, 5, 10)
+	var/setting = 3
 	light_power = 1.75
+
+/obj/structure/outsidelights/floodlight/Initialize()
+	set_light(light_setting_list[setting])
 
 /obj/structure/outsidelights/floodlight/proc/change_setting(val, mob/user)
 	if((val < 1) || (val > light_setting_list.len))
