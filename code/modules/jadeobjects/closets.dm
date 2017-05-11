@@ -29,11 +29,11 @@
 
 
 
-/obj/structure/closet/jademansion/crates/woodencrategeneric
-/obj/structure/closet/jademansion/crates/cleaningsupplies
-/obj/structure/closet/jademansion/crates/logs
-/obj/structure/closet/jademansion/crates/randomchance1
-/obj/structure/closet/jademansion/crates/randomchance2
-/obj/structure/closet/jademansion/crates/randomchance3
+/obj/structure/closet/crate/jademansion/woodencrategeneric
+/obj/structure/closet/crate/jademansion/cleaningsupplies
+/obj/structure/closet/crate/jademansion/logs
+/obj/structure/closet/crate/jademansion/randomchance1
+/obj/structure/closet/crate/jademansion/randomchance2
+/obj/structure/closet/crate/jademansion/randomchance3
 
 
