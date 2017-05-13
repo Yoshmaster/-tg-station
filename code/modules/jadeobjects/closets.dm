@@ -1,5 +1,8 @@
 //TODO: Add actual items and graphics
 
+/obj/structure/closet/jademansion/
+	icon_state = "cabinet"
+
 /obj/structure/closet/jademansion/chemstorage
 /obj/structure/closet/jademansion/medicalroom
 /obj/structure/closet/jademansion/medicalclothes
