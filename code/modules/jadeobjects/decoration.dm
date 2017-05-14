@@ -6,8 +6,7 @@
 	anchored = TRUE
 	density = TRUE
 	light_color = LIGHT_COLOR_BLUE
-	light_power = 1
-	light_range = 1
+	light_range = 3
 
 /obj/structure/mansiondecoration/laptop
 	name = "laptop"
@@ -18,7 +17,7 @@
 	density = TRUE
 	light_color = LIGHT_COLOR_GREEN
 	light_power = 1
-	light_range = 1
+	light_range = 3
 
 /obj/structure/mansiondecoration/oldtv
 	name = "television"

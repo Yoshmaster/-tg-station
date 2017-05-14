@@ -345,7 +345,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 					dat += "</td>"
 
-				if("wings" in pref_species.mutant_bodyparts && GLOB.r_wings_list.len >1)
+				if("wings" in pref_species.mutant_bodyparts)
 					dat += "<td valign='top' width='7%'>"
 
 					dat += "<h3>Wings</h3>"

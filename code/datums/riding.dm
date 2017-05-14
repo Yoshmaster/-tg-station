@@ -98,7 +98,7 @@
 
 
 //atv
-/datum/riding/atv
+/datum/riding/null
 	keytype = /obj/item/key
 	generic_pixel_x = 0
 	generic_pixel_y = 4
@@ -147,7 +147,7 @@
 
 //pimpin ride
 /datum/riding/janicart
-	keytype = /obj/item/key/janitor
+	keytype = null
 
 
 /datum/riding/janicart/handle_vehicle_offsets()

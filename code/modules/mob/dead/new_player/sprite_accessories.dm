@@ -1273,6 +1273,13 @@
 	hasinner = 1
 	color_src = HAIR
 
+/datum/sprite_accessory/ears/singe_headwing
+	icon = 'icons/mob/jadeharpies.dmi'
+	name = "Single Headwing"
+	icon_state = "harpy1"
+	color_src = FACEHAIR
+
+
 /datum/sprite_accessory/wings/none
 	name = "None"
 	icon_state = "none"
@@ -1281,24 +1288,36 @@
 	icon = 'icons/mob/wings.dmi'
 
 /datum/sprite_accessory/wings_open/angel
-	name = "Angel"
+	name = "Large Dove"
 	icon_state = "angel"
 	color_src = 0
 	dimension_x = 46
 	center = TRUE
 	dimension_y = 34
+
+/datum/sprite_accessory/wings_open/tiny
+	name = "Tiny Wings"
+	icon = 'icons/mob/jadeharpies.dmi'
+	icon_state = "tiny"
+	color_src = FACEHAIR
 
 /datum/sprite_accessory/wings
 	icon = 'icons/mob/wings.dmi'
 
 /datum/sprite_accessory/wings/angel
-	name = "Angel"
+	name = "Large Dove"
 	icon_state = "angel"
 	color_src = 0
 	dimension_x = 46
 	center = TRUE
 	dimension_y = 34
-	locked = TRUE
+
+/datum/sprite_accessory/wings/tiny
+	name = "Tiny Wings"
+	icon = 'icons/mob/jadeharpies.dmi'
+	icon_state = "tiny"
+	color_src = FACEHAIR
+
 
 /datum/sprite_accessory/frills
 	icon = 'icons/mob/mutant_bodyparts.dmi'

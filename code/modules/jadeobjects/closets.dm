@@ -28,6 +28,9 @@
 /obj/structure/closet/jademansion/storagelocker2
 /obj/structure/closet/jademansion/storagelocker3
 /obj/structure/closet/jademansion/sleepingstuff
+/obj/structure/closet/jademansion/swimmingm
+/obj/structure/closet/jademansion/swimmingw
+
 
 
 

@@ -1,7 +1,7 @@
 //PIMP-CART
 /obj/vehicle/janicart
-	name = "janicart (pimpin' ride)"
-	desc = "A brave janitor cyborg gave its life to produce such an amazing combination of speed and utility."
+	name = "janicart"
+	desc = "A useful vehicle to help with cleaning."
 	icon_state = "pussywagon"
 
 	var/obj/item/weapon/storage/bag/trash/mybag = null
