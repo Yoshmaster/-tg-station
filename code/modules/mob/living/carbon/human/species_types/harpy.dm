@@ -4,7 +4,7 @@
 	default_color = "FFFFFF"
 	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS)
 	mutant_bodyparts = list("tail_human", "ears", "wings")
-	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None", "wings" = "Angel")
+	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None", "wings" = "Large Dove")
 	use_skintones = 1
 	no_equip = list(slot_back)
 	blacklisted = 1
@@ -15,11 +15,12 @@
 	var/datum/action/innate/flight_up/fly_up
 	var/datum/action/innate/flight_down/fly_down
 
+
 /datum/species/harpy/on_species_gain(mob/living/carbon/human/H, datum/species/old_species)
 	..()
-	if(H.dna && H.dna.species &&((H.dna.features["wings"] != "Angel") && ("wings" in H.dna.species.mutant_bodyparts)))
-		H.dna.features["wings"] = "Angel"
-		H.update_body()
+	/*if(H.dna && H.dna.species &&((H.dna.features["wings"] != "Large Dove") && ("wings" in H.dna.species.mutant_bodyparts)))
+		H.dna.features["wings"] = "Large Dove"
+		H.update_body()*/
 	if(ishuman(H)&& !fly)
 		fly = new
 		fly.Grant(H)
@@ -41,9 +42,9 @@
 	if(H.movement_type & FLYING)
 		H.movement_type &= ~FLYING
 	ToggleFlight(H,0)
-	if(H.dna && H.dna.species &&((H.dna.features["wings"] != "None") && ("wings" in H.dna.species.mutant_bodyparts)))
+	/*if(H.dna && H.dna.species &&((H.dna.features["wings"] != "None") && ("wings" in H.dna.species.mutant_bodyparts)))
 		H.dna.features["wings"] = "None"
-		H.update_body()
+		H.update_body()*/
 	..()
 
 /datum/species/harpy/spec_life(mob/living/carbon/human/H)

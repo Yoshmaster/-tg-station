@@ -98,8 +98,8 @@
 
 
 //atv
-/datum/riding/null
-	keytype = /obj/item/key
+/datum/riding/atv
+	keytype = null
 	generic_pixel_x = 0
 	generic_pixel_y = 4
 	vehicle_move_delay = 1
