@@ -1301,6 +1301,12 @@
 	icon_state = "tiny"
 	color_src = FACEHAIR
 
+/datum/sprite_accessory/wings_open/winghands1
+	name = "Wing Hands"
+	icon = 'icons/mob/jadeharpies.dmi'
+	icon_state = "handwings1"
+	color_src = FACEHAIR
+
 /datum/sprite_accessory/wings
 	icon = 'icons/mob/wings.dmi'
 
@@ -1318,6 +1324,11 @@
 	icon_state = "tiny"
 	color_src = FACEHAIR
 
+/datum/sprite_accessory/wings/winghands1
+	name = "Wing Hands"
+	icon = 'icons/mob/jadeharpies.dmi'
+	icon_state = "handwings1"
+	color_src = FACEHAIR
 
 /datum/sprite_accessory/frills
 	icon = 'icons/mob/mutant_bodyparts.dmi'
