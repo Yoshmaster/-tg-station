@@ -1,8 +1,8 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+
 
 /obj/machinery/computer/telecomms/server
 	name = "telecommunications server monitoring console"
-	icon_state = "comm_logs"
+	icon_screen = "comm_logs"
 
 	var/screen = 0				// the screen number:
 	var/list/servers = list()	// the servers located by the computer
@@ -13,10 +13,10 @@
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
-	req_access = list(access_tcomsat)
-	circuit = "/obj/item/weapon/circuitboard/comm_server"
+	req_access = list(GLOB.access_tcomsat)
+	circuit = /obj/item/weapon/circuitboard/computer/comm_server
 
-/obj/machinery/computer/telecomms/server/attack_hand(mob/user as mob)
+/obj/machinery/computer/telecomms/server/attack_hand(mob/user)
 	if(..())
 		return
 	user.set_machine(src)
@@ -72,14 +72,14 @@
 					var/language = "Human" // MMIs, pAIs, Cyborgs and humans all speak Human
 					var/mobtype = C.parameters["mobtype"]
 
-					var/list/humans = typesof(/mob/living/carbon/human, /mob/living/carbon/brain)
+					var/list/humans = typesof(/mob/living/carbon/human, /mob/living/brain)
 					var/list/monkeys = typesof(/mob/living/carbon/monkey)
 					var/list/silicons = typesof(/mob/living/silicon)
 					var/list/slimes = typesof(/mob/living/simple_animal/slime)
 					var/list/animals = typesof(/mob/living/simple_animal)
 
 					if(mobtype in humans)
-						race = "Human"
+						race = "Humanoid"
 						language = race
 
 					else if(mobtype in slimes) // NT knows a lot about slimes, but not aliens. Can identify slimes
@@ -92,9 +92,9 @@
 
 					else if(mobtype in silicons || C.parameters["job"] == "AI") // sometimes M gets deleted prematurely for AIs... just check the job
 						race = "Artificial Life"
-						language = race
+						language = "Humanoid" //Ais and borgs speak human, and binary isnt picked up.
 
-					else if(istype(mobtype, /obj))
+					else if(isobj(mobtype))
 						race = "Machinery"
 						language = race
 
@@ -108,7 +108,7 @@
 
 					// -- If the orator is a human, or universal translate is active, OR mob has universal speech on --
 
-					if(language == "Human" || universal_translate || C.parameters["uspeech"])
+					if(language == "Humanoid" || universal_translate || C.parameters["uspeech"])
 						dat += "<u><font color = #18743E>Data type</font color></u>: [C.input_type]<br>"
 						dat += "<u><font color = #18743E>Source</font color></u>: [C.parameters["name"]] (Job: [C.parameters["job"]])<br>"
 						dat += "<u><font color = #18743E>Class</font color></u>: [race]<br>"
@@ -173,7 +173,7 @@
 					temp = "<font color = #D70B00>- FAILED: CANNOT PROBE WHEN BUFFER FULL -</font color>"
 
 				else
-					for(var/obj/machinery/telecomms/server/T in range(25, src))
+					for(var/obj/machinery/telecomms/server/T in urange(25, src))
 						if(T.network == network)
 							servers.Add(T)
 
@@ -187,7 +187,7 @@
 	if(href_list["delete"])
 
 		if(!src.allowed(usr) && !emagged)
-			usr << "<span class='danger'>ACCESS DENIED.</span>"
+			to_chat(usr, "<span class='danger'>ACCESS DENIED.</span>")
 			return
 
 		if(SelectedServer)
@@ -197,7 +197,7 @@
 			temp = "<font color = #336699>- DELETED ENTRY: [D.name] -</font color>"
 
 			SelectedServer.log_entries.Remove(D)
-			del(D)
+			qdel(D)
 
 		else
 			temp = "<font color = #D70B00>- FAILED: NO SELECTED MACHINE -</font color>"
@@ -206,7 +206,7 @@
 
 		var/newnet = stripped_input(usr, "Which network do you want to view?", "Comm Monitor", network)
 
-		if(newnet && ((usr in range(1, src) || issilicon(usr))))
+		if(newnet && ((usr in range(1, src)) || issilicon(usr)))
 			if(length(newnet) > 15)
 				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"
 
@@ -221,12 +221,5 @@
 	return
 
 /obj/machinery/computer/telecomms/server/attackby()
-	..()
-	src.updateUsrDialog()
-	return
-
-/obj/machinery/computer/telecomms/server/emag_act(mob/user as mob)
-	if(!emagged)
-		playsound(src.loc, 'sound/effects/sparks4.ogg', 75, 1)
-		emagged = 1
-		user << "<span class='notice'>You you disable the security protocols.</span>"
+	. = ..()
+	updateUsrDialog()

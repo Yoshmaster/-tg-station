@@ -4,23 +4,30 @@
 	icon_state = "breath"
 	item_state = "m_mask"
 	body_parts_covered = 0
-	flags = MASKCOVERSMOUTH | MASKINTERNALS
-	visor_flags = MASKCOVERSMOUTH | MASKINTERNALS
-	w_class = 2
+	flags = MASKINTERNALS
+	visor_flags = MASKINTERNALS
+	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.10
 	permeability_coefficient = 0.50
-	action_button_name = "Adjust Breath Mask"
-	ignore_maskadjust = 0
+	actions_types = list(/datum/action/item_action/adjust)
+	flags_cover = MASKCOVERSMOUTH
+	visor_flags_cover = MASKCOVERSMOUTH
+	resistance_flags = 0
 
-/obj/item/clothing/mask/breath/attack_self(var/mob/user)
+/obj/item/clothing/mask/breath/attack_self(mob/user)
 	adjustmask(user)
 
-/obj/item/clothing/mask/breath/AltClick(var/mob/user)
-	adjustmask(user)
+/obj/item/clothing/mask/breath/AltClick(mob/user)
+	..()
+	if(!user.canUseTopic(src, be_close=TRUE))
+		to_chat(user, "<span class='warning'>You can't do that right now!</span>")
+		return
+	else
+		adjustmask(user)
 
 /obj/item/clothing/mask/breath/examine(mob/user)
 	..()
-	user << "<span class='notice'>Alt-click [src] to adjust it.</span>"
+	to_chat(user, "<span class='notice'>Alt-click [src] to adjust it.</span>")
 
 /obj/item/clothing/mask/breath/medical
 	desc = "A close-fitting sterile mask that can be connected to an air supply."

@@ -1,32 +1,32 @@
-var/datum/subsystem/npcpool/SSbp
+#define PROCESSING_SIMPLES 0
+#define PROCESSING_NPCS 1
+#define PROCESSING_DELEGATES 2
+#define PROCESSING_ASSISTANTS 3
 
-/datum/subsystem/npcpool
-	name = "NPCPool"
-	priority = 100
+SUBSYSTEM_DEF(npcpool)
+	name = "NPC Pool"
+	flags = SS_POST_FIRE_TIMING|SS_NO_INIT|SS_BACKGROUND
+	priority = 20
 
 	var/list/canBeUsed = list()
-	var/list/canBeUsed_non = list()
 	var/list/needsDelegate = list()
 	var/list/needsAssistant = list()
-	var/list/needsHelp_non = list()
-	var/list/botPool_l = list() //list of all npcs using the pool
-	var/list/botPool_l_non = list() //list of all non SNPC mobs using the pool
+	
+	var/list/processing = list()
+	var/list/currentrun = list()
+	var/stage
 
-/datum/subsystem/npcpool/proc/insertBot(var/toInsert)
-	if(istype(toInsert,/mob/living/carbon/human/interactive))
-		botPool_l |= toInsert
-	else if(istype(toInsert,/obj/machinery/bot))
-		botPool_l_non |= toInsert
+/datum/controller/subsystem/npcpool/stat_entry()
+	..("NPCS:[processing.len]|D:[needsDelegate.len]|A:[needsAssistant.len]|U:[canBeUsed.len]")
 
-/datum/subsystem/npcpool/New()
-	NEW_SS_GLOBAL(SSbp)
+/datum/controller/subsystem/npcpool/proc/stop_processing(mob/living/carbon/human/interactive/I)
+	processing -= I
+	currentrun -= I
+	needsDelegate -= I
+	canBeUsed -= I
+	needsAssistant -= I
 
-
-/datum/subsystem/npcpool/stat_entry()
-	stat(name, "[round(cost,0.001)]ds (CPU:[round(cpu,1)]%) (T:[botPool_l.len + botPool_l_non.len] | D: [needsDelegate.len] | A: [needsAssistant.len + needsHelp_non.len] | U: [canBeUsed.len + canBeUsed_non.len])")
-
-
-/datum/subsystem/npcpool/fire()
+/datum/controller/subsystem/npcpool/fire(resumed = FALSE)
 	//bot delegation and coordination systems
 	//General checklist/Tasks for delegating a task or coordinating it (for SNPCs)
 	// 1. Bot proximity to task target: if too far, delegate, if close, coordinate
@@ -34,83 +34,113 @@ var/datum/subsystem/npcpool/SSbp
 	// 3. Process delegation: if a bot (or bots) has been delegated, assign them to the task.
 	// 4. Process coordination: if a bot(or bots) has been asked to coordinate, assign them to help.
 	// 5. Do all assignments: goes through the delegated/coordianted bots and assigns the right variables/tasks to them.
-	var/npcCount = 1
 
-	//bot handling
-	for(var/obj/machinery/bot/check in botPool_l_non)
-		if(!check)
-			botPool_l_non.Cut(npcCount,npcCount+1)
+	if (!resumed)
+		src.currentrun = GLOB.simple_animals.Copy()
+		stage = PROCESSING_SIMPLES
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
 
-		if(check.hacked)
-			needsHelp_non |= check
-		else if(check.frustration > 5) //average for most bots
-			needsHelp_non |= check
-		else if(check.mode == 0)
-			canBeUsed_non |= check
-		npcCount++
+	if(stage == PROCESSING_SIMPLES)
+		while(currentrun.len)
+			var/mob/living/simple_animal/SA = currentrun[currentrun.len]
+			--currentrun.len
 
-	npcCount = 1 //reset the count
+			if(!SA.ckey)
+				if(SA.stat != DEAD)
+					SA.handle_automated_movement()
+				if(SA.stat != DEAD)
+					SA.handle_automated_action()
+				if(SA.stat != DEAD)
+					SA.handle_automated_speech()
+			if (MC_TICK_CHECK)
+				return
 
-	//SNPC handling
-	for(var/mob/living/carbon/human/interactive/check in botPool_l)
-		var/checkInRange = view(MAX_RANGE_FIND,check)
-		if(!check)
-			botPool_l.Cut(npcCount,npcCount+1)
-		if(!(locate(check.TARGET) in checkInRange))
-			needsDelegate |= check
+		stage = PROCESSING_NPCS
+		currentrun = processing.Copy()
+		src.currentrun = currentrun
+	var/list/canBeUsed = src.canBeUsed
 
-		else if(check.isnotfunc(FALSE))
-			needsDelegate |= check
+	if(stage == PROCESSING_NPCS)
+		while(currentrun.len)
+			var/mob/living/carbon/human/interactive/thing = currentrun[currentrun.len]
+			--currentrun.len
 
-		else if(check.doing & FIGHTING)
-			needsAssistant |= check
+			thing.InteractiveProcess()
 
-		else
-			canBeUsed |= check
-		npcCount++
+			var/checkInRange = view(MAX_RANGE_FIND,thing)
+			if(thing.IsDeadOrIncap(FALSE) || !(locate(thing.TARGET) in checkInRange))
+				needsDelegate += thing
+			else if(thing.doing & FIGHTING)
+				needsAssistant += thing
+			else
+				canBeUsed += thing
 
-	if(needsDelegate.len)
-		for(var/mob/living/carbon/human/interactive/check in needsDelegate)
-			if(canBeUsed.len)
-				var/mob/living/carbon/human/interactive/candidate = pick(canBeUsed)
-				var/facCount = 0
-				var/helpProb = 0
-				for(var/C in check.faction)
-					for(var/D in candidate.faction)
-						if(D == C)
-							helpProb = min(100,helpProb + 25)
-						facCount++
-				if(facCount == 1 && helpProb > 0)
-					helpProb = 100
-				if(prob(helpProb))
-					if(candidate.takeDelegate(check))
-						needsDelegate -= check
-						canBeUsed -= candidate
-						candidate.eye_color = "red"
+			if (MC_TICK_CHECK)
+				return
+		stage = PROCESSING_DELEGATES
+		currentrun = needsDelegate	//localcache
+		src.currentrun = currentrun
 
-	if(needsAssistant.len)
-		for(var/mob/living/carbon/human/interactive/check in needsAssistant)
-			if(canBeUsed.len)
-				var/mob/living/carbon/human/interactive/candidate = pick(canBeUsed)
-				var/facCount = 0
-				var/helpProb = 0
-				for(var/C in check.faction)
-					for(var/D in candidate.faction)
-						if(D == C)
-							helpProb = min(100,helpProb + 25)
-						facCount++
-				if(facCount == 1 && helpProb > 0)
-					helpProb = 100
-				if(prob(helpProb))
-					if(candidate.takeDelegate(check,FALSE))
-						needsAssistant -= check
-						canBeUsed -= candidate
-						candidate.eye_color = "yellow"
+	if(stage == PROCESSING_DELEGATES)
+		while(currentrun.len && canBeUsed.len)
+			var/mob/living/carbon/human/interactive/check = currentrun[currentrun.len]
+			var/mob/living/carbon/human/interactive/candidate = canBeUsed[canBeUsed.len]
+			--currentrun.len
 
-	if(needsHelp_non.len)
-		for(var/obj/machinery/bot/B in needsHelp_non)
-			if(canBeUsed_non.len)
-				var/obj/machinery/bot/candidate = pick(canBeUsed_non)
-				candidate.call_bot(B,get_turf(B),FALSE)
-				canBeUsed_non -= B
-				needsHelp_non -= candidate
+			var/helpProb = 0
+			var/list/chfac = check.faction
+			var/list/canfac = candidate.faction
+			var/facCount = LAZYLEN(chfac) * LAZYLEN(canfac)
+
+			for(var/C in chfac)
+				if(C in canfac)
+					helpProb = min(100,helpProb + 25)
+					if(helpProb >= 100)
+						break
+
+			if(facCount == 1 && helpProb)
+				helpProb = 100
+
+			if(prob(helpProb) && candidate.takeDelegate(check))
+				--canBeUsed.len
+				candidate.eye_color = "red"
+				candidate.update_icons()
+
+			if(MC_TICK_CHECK)
+				return
+		stage = PROCESSING_ASSISTANTS
+		currentrun = needsAssistant	//localcache
+		src.currentrun = currentrun
+
+	//no need for the stage check
+
+	while(currentrun.len && canBeUsed.len)
+		var/mob/living/carbon/human/interactive/check = currentrun[currentrun.len]
+		var/mob/living/carbon/human/interactive/candidate = canBeUsed[canBeUsed.len]
+		--currentrun.len
+
+		var/helpProb = 0
+		var/list/chfac = check.faction
+		var/list/canfac = candidate.faction
+		var/facCount = LAZYLEN(chfac) * LAZYLEN(canfac)
+
+		for(var/C in chfac)
+			if(C in canfac)
+				helpProb = min(100,helpProb + 25)
+				if(helpProb >= 100)
+					break
+
+		if(facCount == 1 && helpProb)
+			helpProb = 100
+	
+		if(prob(helpProb) && candidate.takeDelegate(check,FALSE))
+			--canBeUsed.len
+			candidate.eye_color = "yellow"
+			candidate.update_icons()
+			
+		if(!currentrun.len || MC_TICK_CHECK)	//don't change SS state if it isn't necessary
+			return
+
+/datum/controller/subsystem/npcpool/Recover()
+	processing = SSnpcpool.processing

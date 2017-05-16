@@ -1,38 +1,70 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+//supposedly the fastest way to do this according to https://gist.github.com/Giacom/be635398926bb463b42a
+#define RANGE_TURFS(RADIUS, CENTER) \
+  block( \
+    locate(max(CENTER.x-(RADIUS),1),          max(CENTER.y-(RADIUS),1),          CENTER.z), \
+    locate(min(CENTER.x+(RADIUS),world.maxx), min(CENTER.y+(RADIUS),world.maxy), CENTER.z) \
+  )
 
-/proc/get_area(O)
-	var/atom/location = O
-	var/i
-	for(i=1, i<=20, i++)
-		if(isarea(location))
-			return location
-		else if (istype(location))
-			location = location.loc
-		else
-			return null
-	return 0
+#define Z_TURFS(ZLEVEL) block(locate(1,1,ZLEVEL), locate(world.maxx, world.maxy, ZLEVEL))
 
-/proc/get_area_master(O)
-	var/area/A = get_area(O)
-	if(A && A.master)
-		A = A.master
+/proc/get_area(atom/A)
+	if (!istype(A))
+		return
+	for(A, A && !isarea(A), A=A.loc); //semicolon is for the empty statement
 	return A
 
-/proc/get_area_name(N) //get area by its name
+/proc/get_area_name(atom/X)
+	var/area/Y = get_area(X)
+	return Y.name
+
+/proc/get_area_by_name(N) //get area by its name
 	for(var/area/A in world)
 		if(A.name == N)
 			return A
 	return 0
 
-/proc/in_range(source, user)
-	if(get_dist(source, user) <= 1)
-		return 1
+/proc/get_areas_in_range(dist=0, atom/center=usr)
+	if(!dist)
+		var/turf/T = get_turf(center)
+		return T ? list(T.loc) : list()
+	if(!center)
+		return list()
 
-	return 0 //not in range and not telekinetic
+	var/list/turfs = RANGE_TURFS(dist, center)
+	var/list/areas = list()
+	for(var/V in turfs)
+		var/turf/T = V
+		areas |= T.loc
+	return areas
+
+/proc/get_adjacent_areas(atom/center)
+	. = list(get_area(get_ranged_target_turf(center, NORTH, 1)),
+			get_area(get_ranged_target_turf(center, SOUTH, 1)),
+			get_area(get_ranged_target_turf(center, EAST, 1)),
+			get_area(get_ranged_target_turf(center, WEST, 1)))
+	listclearnulls(.)
+
+/proc/get_open_turf_in_dir(atom/center, dir)
+	var/turf/open/T = get_ranged_target_turf(center, dir, 1)
+	if(istype(T))
+		return T
+
+/proc/get_adjacent_open_turfs(atom/center)
+	. = list(get_open_turf_in_dir(center, NORTH),
+			get_open_turf_in_dir(center, SOUTH),
+			get_open_turf_in_dir(center, EAST),
+			get_open_turf_in_dir(center, WEST))
+	listclearnulls(.)
+
+/proc/get_adjacent_open_areas(atom/center)
+	. = list()
+	var/list/adjacent_turfs = get_adjacent_open_turfs(center)
+	for(var/I in adjacent_turfs)
+		. |= get_area(I)
 
 // Like view but bypasses luminosity check
 
-/proc/get_hear(var/range, var/atom/source)
+/proc/get_hear(range, atom/source)
 
 	var/lum = source.luminosity
 	source.luminosity = 6
@@ -42,14 +74,14 @@
 
 	return heard
 
-/proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
-	var/area/our_area = get_area_master(the_area)
-	for(var/C in living_mob_list)
+/proc/alone_in_area(area/the_area, mob/must_be_alone, check_type = /mob/living/carbon)
+	var/area/our_area = get_area(the_area)
+	for(var/C in GLOB.living_mob_list)
 		if(!istype(C, check_type))
 			continue
 		if(C == must_be_alone)
 			continue
-		if(our_area == get_area_master(C))
+		if(our_area == get_area(C))
 			return 0
 	return 1
 
@@ -125,29 +157,20 @@
 
 //This is the new version of recursive_mob_check, used for say().
 //The other proc was left intact because morgue trays use it.
-/proc/recursive_hear_check(var/atom/O)
+//Sped this up again for real this time
+/proc/recursive_hear_check(O)
 	var/list/processing_list = list(O)
-	var/list/processed_list = list()
-	var/list/found_atoms = list()
-
+	. = list()
 	while(processing_list.len)
 		var/atom/A = processing_list[1]
-
 		if(A.flags & HEAR)
-			found_atoms |= A
-
-		for(var/atom/B in A)
-			if(!processed_list[B])
-				processing_list |= B
-
+			. += A
 		processing_list.Cut(1, 2)
-		processed_list[A] = A
-
-	return found_atoms
+		processing_list += A.contents
 
 // Better recursive loop, technically sort of not actually recursive cause that shit is retarded, enjoy.
 //No need for a recursive limit either
-/proc/recursive_mob_check(var/atom/O,var/client_check=1,var/sight_check=1,var/include_radio=1)
+/proc/recursive_mob_check(atom/O,client_check=1,sight_check=1,include_radio=1)
 
 	var/list/processing_list = list(O)
 	var/list/processed_list = list()
@@ -187,7 +210,7 @@
 	return found_mobs
 
 
-/proc/get_hearers_in_view(var/R, var/atom/source)
+/proc/get_hearers_in_view(R, atom/source)
 	// Returns a list of hearers in view(R) from source (ignoring luminosity). Used in saycode.
 	var/turf/T = get_turf(source)
 	var/list/hear = list()
@@ -202,7 +225,7 @@
 	return hear
 
 
-/proc/get_mobs_in_radio_ranges(var/list/obj/item/device/radio/radios)
+/proc/get_mobs_in_radio_ranges(list/obj/item/device/radio/radios)
 
 	set background = BACKGROUND_ENABLED
 
@@ -247,7 +270,7 @@
 #undef SIGN
 
 
-/proc/isInSight(var/atom/A, var/atom/B)
+/proc/isInSight(atom/A, atom/B)
 	var/turf/Aturf = get_turf(A)
 	var/turf/Bturf = get_turf(B)
 
@@ -278,62 +301,73 @@
 
 /proc/try_move_adjacent(atom/movable/AM)
 	var/turf/T = get_turf(AM)
-	for(var/direction in cardinal)
+	for(var/direction in GLOB.cardinal)
 		if(AM.Move(get_step(T, direction)))
 			break
 
-/proc/get_mob_by_key(var/key)
-	for(var/mob/M in mob_list)
+/proc/get_mob_by_key(key)
+	for(var/mob/M in GLOB.mob_list)
 		if(M.ckey == lowertext(key))
 			return M
 	return null
 
 // Will return a list of active candidates. It increases the buffer 5 times until it finds a candidate which is active within the buffer.
 
-/proc/get_candidates(be_special_flag=0, afk_bracket=3000)
+/proc/get_candidates(be_special_type, afk_bracket = config.inactivity_period, jobbanType)
 	var/list/candidates = list()
 	// Keep looping until we find a non-afk candidate within the time bracket (we limit the bracket to 10 minutes (6000))
-	while(!candidates.len && afk_bracket < 6000)
-		for(var/mob/dead/observer/G in player_list)
+	while(!candidates.len && afk_bracket < config.afk_period)
+		for(var/mob/dead/observer/G in GLOB.player_list)
 			if(G.client != null)
 				if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
-					if(!G.client.is_afk(afk_bracket) && (G.client.prefs.be_special & be_special_flag))
-						candidates += G.client
+					if(!G.client.is_afk(afk_bracket) && (be_special_type in G.client.prefs.be_special))
+						if (jobbanType)
+							if(!(jobban_isbanned(G, jobbanType) || jobban_isbanned(G, "Syndicate")))
+								candidates += G.client
+						else
+							candidates += G.client
 		afk_bracket += 600 // Add a minute to the bracket, for every attempt
 	return candidates
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
-	if(!isobj(O))	O = new /obj/screen/text()
+	if(!isobj(O))
+		O = new /obj/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height
 	O.maptext_width = maptext_width
 	O.screen_loc = screen_loc
 	return O
 
-/proc/Show2Group4Delay(obj/O, list/group, delay=0)
-	if(!isobj(O))	return
-	if(!group)	group = clients
-	for(var/client/C in group)
-		C.screen += O
-	if(delay)
-		spawn(delay)
-			for(var/client/C in group)
-				C.screen -= O
+/proc/remove_images_from_clients(image/I, list/show_to)
+	for(var/client/C in show_to)
+		C.images -= I
 
 /proc/flick_overlay(image/I, list/show_to, duration)
 	for(var/client/C in show_to)
 		C.images += I
-	sleep(duration)
-	for(var/client/C in show_to)
-		C.images -= I
+	addtimer(CALLBACK(GLOBAL_PROC, /.proc/remove_images_from_clients, I, show_to), duration)
 
-/proc/get_active_player_count()
+/proc/flick_overlay_view(image/I, atom/target, duration) //wrapper for the above, flicks to everyone who can see the target atom
+	var/list/viewing = list()
+	for(var/m in viewers(target))
+		var/mob/M = m
+		if(M.client)
+			viewing += M.client
+	flick_overlay(I, viewing, duration)
+
+/proc/get_active_player_count(var/alive_check = 0, var/afk_check = 0, var/human_check = 0)
 	// Get active players who are playing in the round
 	var/active_players = 0
-	for(var/i = 1; i <= player_list.len; i++)
-		var/mob/M = player_list[i]
+	for(var/i = 1; i <= GLOB.player_list.len; i++)
+		var/mob/M = GLOB.player_list[i]
 		if(M && M.client)
-			if(istype(M, /mob/new_player)) // exclude people in the lobby
+			if(alive_check && M.stat)
+				continue
+			else if(afk_check && M.client.is_afk())
+				continue
+			else if(human_check && !ishuman(M))
+				continue
+			else if(isnewplayer(M)) // exclude people in the lobby
 				continue
 			else if(isobserver(M)) // Ghosts are fine if they were playing once (didn't start as observers)
 				var/mob/dead/observer/O = M
@@ -363,7 +397,7 @@
 	src.dest_x = dest_x
 	src.dest_y = dest_y
 
-/proc/projectile_trajectory(var/src_x, var/src_y, var/rotation, var/angle, var/power)
+/proc/projectile_trajectory(src_x, src_y, rotation, angle, power)
 
 	// returns the destination (Vx,y) that a projectile shot at [src_x], [src_y], with an angle of [angle],
 	// rotated at [rotation] and with the power of [power]
@@ -379,3 +413,126 @@
 	var/dest_y = src_y + distance*cos(rotation);
 
 	return new /datum/projectile_data(src_x, src_y, time, distance, power_x, power_y, dest_x, dest_y)
+
+/proc/showCandidatePollWindow(mob/dead/observer/G, poll_time, Question, list/candidates, ignore_category, time_passed, flashwindow = TRUE)
+	set waitfor = 0
+
+	G << 'sound/misc/notice2.ogg' //Alerting them to their consideration
+	if(flashwindow)
+		window_flash(G.client)
+	switch(ignore_category ? askuser(G,Question,"Please answer in [poll_time/10] seconds!","Yes","No","Never for this round", StealFocus=0, Timeout=poll_time) : askuser(G,Question,"Please answer in [poll_time/10] seconds!","Yes","No", StealFocus=0, Timeout=poll_time))
+		if(1)
+			to_chat(G, "<span class='notice'>Choice registered: Yes.</span>")
+			if((world.time-time_passed)>poll_time)
+				to_chat(G, "<span class='danger'>Sorry, you were too late for the consideration!</span>")
+				G << 'sound/machines/buzz-sigh.ogg'
+			else
+				candidates += G
+		if(2)
+			to_chat(G, "<span class='danger'>Choice registered: No.</span>")
+		if(3)
+			var/list/L = GLOB.poll_ignore[ignore_category]
+			if(!L)
+				GLOB.poll_ignore[ignore_category] = list()
+			GLOB.poll_ignore[ignore_category] += G.ckey
+			to_chat(G, "<span class='danger'>Choice registered: Never for this round.</span>")
+
+/proc/pollCandidates(var/Question, var/jobbanType, var/datum/game_mode/gametypeCheck, var/be_special_flag = 0, var/poll_time = 300, var/ignore_category = null, flashwindow = TRUE)
+	var/list/mob/dead/observer/candidates = list()
+	var/time_passed = world.time
+	if (!Question)
+		Question = "Would you like to be a special role?"
+
+	for(var/mob/dead/observer/G in GLOB.player_list)
+		if(!G.key || !G.client || (ignore_category && GLOB.poll_ignore[ignore_category] && G.ckey in GLOB.poll_ignore[ignore_category]))
+			continue
+		if(be_special_flag)
+			if(!(G.client.prefs) || !(be_special_flag in G.client.prefs.be_special))
+				continue
+		if (gametypeCheck)
+			if(!gametypeCheck.age_check(G.client))
+				continue
+		if (jobbanType)
+			if(jobban_isbanned(G, jobbanType) || jobban_isbanned(G, "Syndicate"))
+				continue
+
+		showCandidatePollWindow(G, poll_time, Question, candidates, ignore_category, time_passed, flashwindow)
+	sleep(poll_time)
+
+	//Check all our candidates, to make sure they didn't log off during the wait period.
+	for(var/mob/dead/observer/G in candidates)
+		if(!G.key || !G.client)
+			candidates.Remove(G)
+
+	listclearnulls(candidates)
+
+	return candidates
+
+/proc/pollCandidatesForMob(Question, jobbanType, datum/game_mode/gametypeCheck, be_special_flag = 0, poll_time = 300, mob/M, ignore_category = null)
+	var/list/L = pollCandidates(Question, jobbanType, gametypeCheck, be_special_flag, poll_time, ignore_category)
+	if(!M || QDELETED(M) || !M.loc)
+		return list()
+	return L
+
+/proc/pollCandidatesForMobs(Question, jobbanType, datum/game_mode/gametypeCheck, be_special_flag = 0, poll_time = 300, list/mobs, ignore_category = null)
+	var/list/L = pollCandidates(Question, jobbanType, gametypeCheck, be_special_flag, poll_time, ignore_category)
+	var/i=1
+	for(var/v in mobs)
+		var/atom/A = v
+		if(!A || QDELETED(A) || !A.loc)
+			mobs.Cut(i,i+1)
+		else
+			++i
+	return L
+
+/proc/makeBody(mob/dead/observer/G_found) // Uses stripped down and bastardized code from respawn character
+	if(!G_found || !G_found.key)
+		return
+
+	//First we spawn a dude.
+	var/mob/living/carbon/human/new_character = new(pick(GLOB.latejoin))//The mob being spawned.
+
+	G_found.client.prefs.copy_to(new_character)
+	new_character.dna.update_dna_identity()
+	new_character.key = G_found.key
+
+	return new_character
+
+/proc/send_to_playing_players(thing) //sends a whatever to all playing players; use instead of to_chat(world, where needed)
+	for(var/M in GLOB.player_list)
+		if(M && !isnewplayer(M))
+			to_chat(M, thing)
+
+/proc/window_flash(client/C, ignorepref = FALSE)
+	if(ismob(C))
+		var/mob/M = C
+		if(M.client)
+			C = M.client
+	if(!C || (!C.prefs.windowflashing && !ignorepref))
+		return
+	winset(C, "mainwindow", "flash=5")
+
+/proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)
+	if(SSticker.current_state != GAME_STATE_PLAYING || !character)
+		return
+	var/area/A = get_area(character)
+	var/message = "<span class='game deadsay'><span class='name'>\
+		[character.real_name]</span> ([rank]) has arrived at the station at \
+		<span class='name'>[A.name]</span>.</span>"
+	deadchat_broadcast(message, follow_target = character, message_type=DEADCHAT_ARRIVALRATTLE)
+	if((!GLOB.announcement_systems.len) || (!character.mind))
+		return
+	if((character.mind.assigned_role == "Cyborg") || (character.mind.assigned_role == character.mind.special_role))
+		return
+
+	var/obj/machinery/announcement_system/announcer = pick(GLOB.announcement_systems)
+	announcer.announce("ARRIVAL", character.real_name, rank, list()) //make the list empty to make it announce it in common
+
+/proc/GetRedPart(const/hexa)
+	return hex2num(copytext(hexa, 2, 4))
+
+/proc/GetGreenPart(const/hexa)
+	return hex2num(copytext(hexa, 4, 6))
+
+/proc/GetBluePart(const/hexa)
+	return hex2num(copytext(hexa, 6, 8))

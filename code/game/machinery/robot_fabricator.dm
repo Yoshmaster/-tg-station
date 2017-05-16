@@ -6,33 +6,35 @@
 	anchored = 1
 	var/metal_amount = 0
 	var/operating = 0
-	var/obj/item/robot_parts/being_built = null
+	var/obj/item/being_built = null
 	use_power = 1
 	idle_power_usage = 20
 	active_power_usage = 5000
 
-/obj/machinery/robotic_fabricator/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+/obj/machinery/robotic_fabricator/attackby(obj/item/O, mob/user, params)
 	if (istype(O, /obj/item/stack/sheet/metal))
-		if (src.metal_amount < 150000.0)
+		if (src.metal_amount < 150000)
 			var/count = 0
-			src.overlays += "fab-load-metal"
+			src.add_overlay("fab-load-metal")
 			spawn(15)
 				if(O)
 					if(!O:amount)
 						return
 					while(metal_amount < 150000 && O:amount)
-						src.metal_amount += O:m_amt /*O:height * O:width * O:length * 100000.0*/
+						src.metal_amount += O:materials[MAT_METAL] /*O:height * O:width * O:length * 100000*/
 						O:amount--
 						count++
 
 					if (O:amount < 1)
 						qdel(O)
 
-					user << "<span class='notice'>You insert [count] metal sheet\s into \the [src].</span>"
-					src.overlays -= "fab-load-metal"
+					to_chat(user, "<span class='notice'>You insert [count] metal sheet\s into \the [src].</span>")
+					cut_overlay("fab-load-metal")
 					updateDialog()
 		else
-			user << "\The [src] is full."
+			to_chat(user, "\The [src] is full.")
+	else
+		return ..()
 
 /obj/machinery/robotic_fabricator/power_change()
 	if (powered())
@@ -40,10 +42,10 @@
 	else
 		stat |= NOPOWER
 
-/obj/machinery/robotic_fabricator/attack_paw(user as mob)
+/obj/machinery/robotic_fabricator/attack_paw(mob/user)
 	return src.attack_hand(user)
 
-/obj/machinery/robotic_fabricator/attack_hand(user as mob)
+/obj/machinery/robotic_fabricator/attack_hand(mob/user)
 	var/dat
 	if (..())
 		return
@@ -88,37 +90,37 @@ Please wait until completion...</TT><BR>
 
 			switch (part_type)
 				if (1)
-					build_type = "/obj/item/robot_parts/l_arm"
+					build_type = "/obj/item/bodypart/l_arm/robot"
 					build_time = 200
 					build_cost = 10000
 
 				if (2)
-					build_type = "/obj/item/robot_parts/r_arm"
+					build_type = "/obj/item/bodypart/r_arm/robot"
 					build_time = 200
 					build_cost = 10000
 
 				if (3)
-					build_type = "/obj/item/robot_parts/l_leg"
+					build_type = "/obj/item/bodypart/l_leg/robot"
 					build_time = 200
 					build_cost = 10000
 
 				if (4)
-					build_type = "/obj/item/robot_parts/r_leg"
+					build_type = "/obj/item/bodypart/r_leg/robot"
 					build_time = 200
 					build_cost = 10000
 
 				if (5)
-					build_type = "/obj/item/robot_parts/chest"
+					build_type = "/obj/item/bodypart/chest/robot"
 					build_time = 350
 					build_cost = 40000
 
 				if (6)
-					build_type = "/obj/item/robot_parts/head"
+					build_type = "/obj/item/bodypart/head/robot"
 					build_time = 350
 					build_cost = 5000
 
 				if (7)
-					build_type = "/obj/item/robot_parts/robot_suit"
+					build_type = "/obj/item/robot_suit"
 					build_time = 600
 					build_cost = 15000
 
@@ -132,7 +134,7 @@ Please wait until completion...</TT><BR>
 
 					src.being_built = new building(src)
 
-					src.overlays += "fab-active"
+					src.add_overlay("fab-active")
 					src.updateUsrDialog()
 
 					spawn (build_time)
@@ -141,9 +143,7 @@ Please wait until completion...</TT><BR>
 							src.being_built = null
 						src.use_power = 1
 						src.operating = 0
-						src.overlays -= "fab-active"
+						cut_overlay("fab-active")
 		return
 
-	for (var/mob/M in viewers(1, src))
-		if (M.client && M.machine == src)
-			src.attack_hand(M)
+	updateUsrDialog()

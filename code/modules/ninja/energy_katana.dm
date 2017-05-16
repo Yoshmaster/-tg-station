@@ -1,4 +1,3 @@
-
 /obj/item/weapon/katana/energy
 	name = "energy katana"
 	desc = "A katana infused with strong energy."
@@ -6,7 +5,9 @@
 	item_state = "energy_katana"
 	force = 40
 	throwforce = 20
-	var/datum/effect/effect/system/spark_spread/spark_system
+	armour_penetration = 50
+	resistance_flags = LAVA_PROOF | FIRE_PROOF | ACID_PROOF
+	var/datum/effect_system/spark_spread/spark_system
 
 /obj/item/weapon/katana/energy/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!user || !target)
@@ -34,10 +35,10 @@
 
 	..()
 
-/obj/item/weapon/katana/energy/proc/returnToOwner(var/mob/living/carbon/human/user, var/doSpark = 1, var/caught = 0)
+/obj/item/weapon/katana/energy/proc/returnToOwner(mob/living/carbon/human/user, doSpark = 1, caught = 0)
 	if(!istype(user))
 		return
-	loc = get_turf(src)
+	forceMove(get_turf(user))
 
 	if(doSpark)
 		spark_system.start()
@@ -50,7 +51,6 @@
 	else if(user.equip_to_slot_if_possible(src, slot_belt, 0, 1, 1))
 		msg = "Your Energy Katana teleports back to you, sheathing itself as it does so!</span>"
 	else
-		loc = get_turf(user)
 		msg = "Your Energy Katana teleports to your location!"
 
 	if(caught)
@@ -60,19 +60,13 @@
 			msg = "Your Energy Katana lands at your feet!"
 
 	if(msg)
-		user << "<span class='notice'>[msg]</span>"
+		to_chat(user, "<span class='notice'>[msg]</span>")
 
 /obj/item/weapon/katana/energy/New()
 	..()
-	spark_system = new /datum/effect/effect/system/spark_spread()
+	spark_system = new /datum/effect_system/spark_spread()
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
-
-
-/obj/item/weapon/katana/energy/Del()
-	qdel(spark_system)
-	spark_system = null
-	..()
 
 /obj/item/weapon/katana/energy/Destroy()
 	qdel(spark_system)

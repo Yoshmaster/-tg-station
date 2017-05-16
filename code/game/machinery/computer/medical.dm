@@ -1,11 +1,12 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+
 
 /obj/machinery/computer/med_data//TODO:SANITY
 	name = "medical records console"
 	desc = "This can be used to check medical records."
-	icon_state = "medcomp"
-	req_one_access = list(access_medical, access_forensics_lockers)
-	circuit = /obj/item/weapon/circuitboard/med_data
+	icon_screen = "medcomp"
+	icon_keyboard = "med_key"
+	req_one_access = list(GLOB.access_medical, GLOB.access_forensics_lockers)
+	circuit = /obj/item/weapon/circuitboard/computer/med_data
 	var/obj/item/weapon/card/id/scan = null
 	var/authenticated = null
 	var/rank = null
@@ -19,16 +20,19 @@
 	var/sortBy = "name"
 	var/order = 1 // -1 = Descending - 1 = Ascending
 
-/obj/machinery/computer/med_data/attackby(obj/item/O as obj, user as mob, params)
+	light_color = LIGHT_COLOR_BLUE
+
+/obj/machinery/computer/med_data/attackby(obj/item/O, mob/user, params)
 	if(istype(O, /obj/item/weapon/card/id) && !scan)
-		usr.drop_item()
+		if(!user.drop_item())
+			return
 		O.loc = src
 		scan = O
-		user << "<span class='notice'>You insert [O].</span>"
+		to_chat(user, "<span class='notice'>You insert [O].</span>")
 	else
-		..()
+		return ..()
 
-/obj/machinery/computer/med_data/attack_hand(mob/user as mob)
+/obj/machinery/computer/med_data/attack_hand(mob/user)
 	if(..())
 		return
 	var/dat
@@ -38,7 +42,7 @@
 		dat = text("Confirm Identity: <A href='?src=\ref[];scan=1'>[]</A><HR>", src, (src.scan ? text("[]", src.scan.name) : "----------"))
 		if(src.authenticated)
 			switch(src.screen)
-				if(1.0)
+				if(1)
 					dat += {"
 <A href='?src=\ref[src];search=1'>Search Records</A>
 <BR><A href='?src=\ref[src];screen=2'>List Records</A>
@@ -49,7 +53,7 @@
 <BR><A href='?src=\ref[src];screen=3'>Record Maintenance</A>
 <BR><A href='?src=\ref[src];logout=1'>{Log Out}</A><BR>
 "}
-				if(2.0)
+				if(2)
 					dat += {"
 </p>
 <table style="text-align:center;" cellspacing="0" width="100%">
@@ -68,11 +72,11 @@
 </tr>"}
 
 
-					if(!isnull(data_core.general))
-						for(var/datum/data/record/R in sortRecord(data_core.general, sortBy, order))
+					if(!isnull(GLOB.data_core.general))
+						for(var/datum/data/record/R in sortRecord(GLOB.data_core.general, sortBy, order))
 							var/blood_type = ""
 							var/b_dna = ""
-							for(var/datum/data/record/E in data_core.medical)
+							for(var/datum/data/record/E in GLOB.data_core.medical)
 								if((E.fields["name"] == R.fields["name"] && E.fields["id"] == R.fields["id"]))
 									blood_type = E.fields["blood_type"]
 									b_dna = E.fields["b_dna"]
@@ -94,17 +98,17 @@
 							dat += text("<td>[]</td>", R.fields["p_stat"])
 							dat += text("<td>[]</td></tr>", R.fields["m_stat"])
 					dat += "</table><hr width='75%' />"
-//					if(data_core.general)
-//						for(var/datum/data/record/R in sortRecord(data_core.general))
+//					if(GLOB.data_core.general)
+//						for(var/datum/data/record/R in sortRecord(GLOB.data_core.general))
 //							dat += "<A href='?src=\ref[src];d_rec=[R.fields["id"]]'>[R.fields["id"]]: [R.fields["name"]]<BR>"
 //							//Foreach goto(132)
 					dat += text("<HR><A href='?src=\ref[];screen=1'>Back</A>", src)
-				if(3.0)
+				if(3)
 					dat += text("<B>Records Maintenance</B><HR>\n<A href='?src=\ref[];back=1'>Backup To Disk</A><BR>\n<A href='?src=\ref[];u_load=1'>Upload From Disk</A><BR>\n<A href='?src=\ref[];del_all=1'>Delete All Records</A><BR>\n<BR>\n<A href='?src=\ref[];screen=1'>Back</A>", src, src, src, src)
-				if(4.0)
+				if(4)
 
 					dat += "<table><tr><td><b><font size='4'>Medical Record</font></b></td></tr>"
-					if(active1 in data_core.general)
+					if(active1 in GLOB.data_core.general)
 						if(istype(active1.fields["photo_front"], /obj/item/weapon/photo))
 							var/obj/item/weapon/photo/P1 = active1.fields["photo_front"]
 							user << browse_rsc(P1.img, "photo_front")
@@ -126,7 +130,7 @@
 						dat += "<tr><td>General Record Lost!</td></tr>"
 
 					dat += "<tr><td><br><b><font size='4'>Medical Data</font></b></td></tr>"
-					if(active2 in data_core.medical)
+					if(active2 in GLOB.data_core.medical)
 						dat += "<tr><td>Blood Type:</td><td><A href='?src=\ref[src];field=blood_type'>&nbsp;[active2.fields["blood_type"]]&nbsp;</A></td></tr>"
 						dat += "<tr><td>DNA:</td><td><A href='?src=\ref[src];field=b_dna'>&nbsp;[active2.fields["b_dna"]]&nbsp;</A></td></tr>"
 						dat += "<tr><td><br>Minor Disabilities:</td><td><br><A href='?src=\ref[src];field=mi_dis'>&nbsp;[active2.fields["mi_dis"]]&nbsp;</A></td></tr>"
@@ -153,7 +157,7 @@
 					dat += "<tr><td><A href='?src=\ref[src];print_p=1'>Print Record</A></td></tr>"
 					dat += "<tr><td><A href='?src=\ref[src];screen=2'>Back</A></td></tr>"
 					dat += "</table>"
-				if(5.0)
+				if(5)
 					dat += "<CENTER><B>Virus Database</B></CENTER>"
 					for(var/Dt in typesof(/datum/disease/))
 						var/datum/disease/Dis = new Dt(0)
@@ -163,13 +167,14 @@
 							continue
 						dat += "<br><a href='?src=\ref[src];vir=[Dt]'>[Dis.name]</a>"
 					dat += "<br><a href='?src=\ref[src];screen=1'>Back</a>"
-				if(6.0)
+				if(6)
 					dat += "<center><b>Medical Robot Monitor</b></center>"
 					dat += "<a href='?src=\ref[src];screen=1'>Back</a>"
 					dat += "<br><b>Medical Robots:</b>"
 					var/bdat = null
-					for(var/obj/machinery/bot/medbot/M in world)
-						if(M.z != src.z)	continue	//only find medibots on the same z-level as the computer
+					for(var/mob/living/simple_animal/bot/medbot/M in GLOB.living_mob_list)
+						if(M.z != src.z)
+							continue	//only find medibots on the same z-level as the computer
 						var/turf/bl = get_turf(M)
 						if(bl)	//if it can't find a turf for the medibot, then it probably shouldn't be showing up
 							bdat += "[M.name] - <b>\[[bl.x],[bl.y]\]</b> - [M.on ? "Online" : "Offline"]<br>"
@@ -186,8 +191,6 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];login=1'>{Log In}</A>", src)
-	//user << browse(text("<HEAD><TITLE>Medical Records</TITLE></HEAD><TT>[]</TT>", dat), "window=med_rec")
-	//onclose(user, "med_rec")
 	var/datum/browser/popup = new(user, "med_rec", "Medical Records Console", 600, 400)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
@@ -198,23 +201,27 @@
 	. = ..()
 	if(.)
 		return .
-	if(!(active1 in data_core.general))
+	if(!(active1 in GLOB.data_core.general))
 		src.active1 = null
-	if(!(active2 in data_core.medical))
+	if(!(active2 in GLOB.data_core.medical))
 		src.active2 = null
 
-	if((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if(usr.contents.Find(src) || (in_range(src, usr) && isturf(loc)) || issilicon(usr) || IsAdminGhost(usr))
 		usr.set_machine(src)
 		if(href_list["temp"])
 			src.temp = null
 		if(href_list["scan"])
 			if(src.scan)
-				src.scan.loc = src.loc
+				if(ishuman(usr) && !usr.get_active_held_item())
+					usr.put_in_hands(scan)
+				else
+					scan.loc = get_turf(src)
 				src.scan = null
 			else
-				var/obj/item/I = usr.get_active_hand()
+				var/obj/item/I = usr.get_active_held_item()
 				if(istype(I, /obj/item/weapon/card/id))
-					usr.drop_item()
+					if(!usr.drop_item())
+						return
 					I.loc = src
 					src.scan = I
 		else if(href_list["logout"])
@@ -236,11 +243,17 @@
 					sortBy = href_list["sort"]
 					order = initial(order)
 		else if(href_list["login"])
-			if(istype(usr, /mob/living/silicon))
+			if(issilicon(usr))
 				src.active1 = null
 				src.active2 = null
 				src.authenticated = 1
 				src.rank = "AI"
+				src.screen = 1
+			else if(IsAdminGhost(usr))
+				src.active1 = null
+				src.active2 = null
+				src.authenticated = 1
+				src.rank = "Central Command"
 				src.screen = 1
 			else if(istype(src.scan, /obj/item/weapon/card/id))
 				src.active1 = null
@@ -280,7 +293,7 @@
 
 			else if(href_list["del_all2"])
 				investigate_log("[usr.name] ([usr.key]) has deleted all medical records.", "records")
-				data_core.medical.Cut()
+				GLOB.data_core.medical.Cut()
 				src.temp = "All records deleted."
 
 			else if(href_list["field"])
@@ -447,13 +460,13 @@
 			else if(href_list["del_r2"])
 				investigate_log("[usr.name] ([usr.key]) has deleted the medical records for [active1.fields["name"]].", "records")
 				if(active2)
-					data_core.medical -= active2
+					qdel(active2)
 					active2 = null
 
 			else if(href_list["d_rec"])
-				active1 = find_record("id", href_list["d_rec"], data_core.general)
+				active1 = find_record("id", href_list["d_rec"], GLOB.data_core.general)
 				if(active1)
-					active2 = find_record("id", href_list["d_rec"], data_core.medical)
+					active2 = find_record("id", href_list["d_rec"], GLOB.data_core.medical)
 				if(!active2)
 					active1 = null
 				screen = 4
@@ -475,12 +488,12 @@
 					R.fields["cdi"] = "None"
 					R.fields["cdi_d"] = "No diseases have been diagnosed at the moment."
 					R.fields["notes"] = "No notes."
-					data_core.medical += R
+					GLOB.data_core.medical += R
 					src.active2 = R
 					src.screen = 4
 
 			else if(href_list["add_c"])
-				if(!(active2 in data_core.medical))
+				if(!(active2 in GLOB.data_core.medical))
 					return
 				var/a2 = src.active2
 				var/t1 = stripped_multiline_input("Add Comment:", "Med. records", null, null)
@@ -489,7 +502,7 @@
 				var/counter = 1
 				while(src.active2.fields[text("com_[]", counter)])
 					counter++
-				src.active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [] [], []<BR>[]", src.authenticated, src.rank, worldtime2text(), time2text(world.realtime, "MMM DD"), year_integer+540, t1,)
+				src.active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [] [], []<BR>[]", src.authenticated, src.rank, worldtime2text(), time2text(world.realtime, "MMM DD"), GLOB.year_integer+540, t1)
 
 			else if(href_list["del_c"])
 				if((istype(src.active2, /datum/data/record) && src.active2.fields[text("com_[]", href_list["del_c"])]))
@@ -502,15 +515,15 @@
 				src.active1 = null
 				src.active2 = null
 				t1 = lowertext(t1)
-				for(var/datum/data/record/R in data_core.medical)
+				for(var/datum/data/record/R in GLOB.data_core.medical)
 					if((lowertext(R.fields["name"]) == t1 || t1 == lowertext(R.fields["id"]) || t1 == lowertext(R.fields["b_dna"])))
 						src.active2 = R
 					else
 						//Foreach continue //goto(3229)
 				if(!( src.active2 ))
-					src.temp = text("Could not locate record [].", t1)
+					src.temp = text("Could not locate record [].", sanitize(t1))
 				else
-					for(var/datum/data/record/E in data_core.general)
+					for(var/datum/data/record/E in GLOB.data_core.general)
 						if((E.fields["name"] == src.active2.fields["name"] || E.fields["id"] == src.active2.fields["id"]))
 							src.active1 = E
 						else
@@ -520,28 +533,28 @@
 			else if(href_list["print_p"])
 				if(!( src.printing ))
 					src.printing = 1
-					data_core.medicalPrintCount++
+					GLOB.data_core.medicalPrintCount++
 					playsound(loc, 'sound/items/poster_being_created.ogg', 100, 1)
 					sleep(30)
 					var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( src.loc )
-					P.info = "<CENTER><B>Medical Record - (MR-[data_core.medicalPrintCount])</B></CENTER><BR>"
-					if(active1 in data_core.general)
+					P.info = "<CENTER><B>Medical Record - (MR-[GLOB.data_core.medicalPrintCount])</B></CENTER><BR>"
+					if(active1 in GLOB.data_core.general)
 						P.info += text("Name: [] ID: []<BR>\nSex: []<BR>\nAge: []<BR>", src.active1.fields["name"], src.active1.fields["id"], src.active1.fields["sex"], src.active1.fields["age"])
 						if(config.mutant_races)
 							P.info += "\nSpecies: [active1.fields["species"]]<BR>"
 						P.info += text("\nFingerprint: []<BR>\nPhysical Status: []<BR>\nMental Status: []<BR>", src.active1.fields["fingerprint"], src.active1.fields["p_stat"], src.active1.fields["m_stat"])
 					else
 						P.info += "<B>General Record Lost!</B><BR>"
-					if(active2 in data_core.medical)
+					if(active2 in GLOB.data_core.medical)
 						P.info += text("<BR>\n<CENTER><B>Medical Data</B></CENTER><BR>\nBlood Type: []<BR>\nDNA: []<BR>\n<BR>\nMinor Disabilities: []<BR>\nDetails: []<BR>\n<BR>\nMajor Disabilities: []<BR>\nDetails: []<BR>\n<BR>\nAllergies: []<BR>\nDetails: []<BR>\n<BR>\nCurrent Diseases: [] (per disease info placed in log/comment section)<BR>\nDetails: []<BR>\n<BR>\nImportant Notes:<BR>\n\t[]<BR>\n<BR>\n<CENTER><B>Comments/Log</B></CENTER><BR>", src.active2.fields["blood_type"], src.active2.fields["b_dna"], src.active2.fields["mi_dis"], src.active2.fields["mi_dis_d"], src.active2.fields["ma_dis"], src.active2.fields["ma_dis_d"], src.active2.fields["alg"], src.active2.fields["alg_d"], src.active2.fields["cdi"], src.active2.fields["cdi_d"], src.active2.fields["notes"])
 						var/counter = 1
 						while(src.active2.fields[text("com_[]", counter)])
 							P.info += text("[]<BR>", src.active2.fields[text("com_[]", counter)])
 							counter++
-						P.name = text("MR-[] '[]'", data_core.medicalPrintCount, src.active1.fields["name"])
+						P.name = text("MR-[] '[]'", GLOB.data_core.medicalPrintCount, src.active1.fields["name"])
 					else
 						P.info += "<B>Medical Record Lost!</B><BR>"
-						P.name = text("MR-[] '[]'", data_core.medicalPrintCount, "Record Lost")
+						P.name = text("MR-[] '[]'", GLOB.data_core.medicalPrintCount, "Record Lost")
 					P.info += "</TT>"
 					src.printing = null
 
@@ -550,32 +563,31 @@
 	return
 
 /obj/machinery/computer/med_data/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
-		..(severity)
-		return
+	if(!(stat & (BROKEN|NOPOWER)))
+		for(var/datum/data/record/R in GLOB.data_core.medical)
+			if(prob(10/severity))
+				switch(rand(1,6))
+					if(1)
+						if(prob(10))
+							R.fields["name"] = random_unique_lizard_name(R.fields["sex"],1)
+						else
+							R.fields["name"] = random_unique_name(R.fields["sex"],1)
+					if(2)
+						R.fields["sex"]	= pick("Male", "Female")
+					if(3)
+						R.fields["age"] = rand(AGE_MIN, AGE_MAX)
+					if(4)
+						R.fields["blood_type"] = random_blood_type()
+					if(5)
+						R.fields["p_stat"] = pick("*Unconcious*", "Active", "Physically Unfit")
+					if(6)
+						R.fields["m_stat"] = pick("*Insane*", "*Unstable*", "*Watch*", "Stable")
+				continue
 
-	for(var/datum/data/record/R in data_core.medical)
-		if(prob(10/severity))
-			switch(rand(1,6))
-				if(1)
-					R.fields["name"] = random_name(R.fields["sex"],1)
-				if(2)
-					R.fields["sex"]	= pick("Male", "Female")
-				if(3)
-					R.fields["age"] = rand(AGE_MIN, AGE_MAX)
-				if(4)
-					R.fields["blood_type"] = random_blood_type()
-				if(5)
-					R.fields["p_stat"] = pick("*Unconcious*", "Active", "Physically Unfit")
-				if(6)
-					R.fields["m_stat"] = pick("*Insane*", "*Unstable*", "*Watch*", "Stable")
-			continue
-
-		else if(prob(1))
-			del(R)
-			continue
-
-	..(severity)
+			else if(prob(1))
+				qdel(R)
+				continue
+	..()
 
 /obj/machinery/computer/med_data/proc/canUseMedicalRecordsConsole(mob/user, message = 1, record1, record2)
 	if(user)
@@ -590,4 +602,7 @@
 /obj/machinery/computer/med_data/laptop
 	name = "medical laptop"
 	desc = "A cheap Nanotrasen medical laptop, it functions as a medical records computer. It's bolted to the table."
-	icon_state = "medlaptop"
+	icon_state = "laptop"
+	icon_screen = "medlaptop"
+	icon_keyboard = "laptop_key"
+	clockwork = TRUE //it'd look weird

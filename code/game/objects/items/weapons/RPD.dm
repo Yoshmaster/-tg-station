@@ -1,11 +1,11 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /*
 CONTAINS:
 RPD
 */
 #define PIPE_BINARY		0
-#define PIPE_BENT		1
+#define PIPE_BENDABLE	1
 #define PIPE_TRINARY	2
 #define PIPE_TRIN_M		3
 #define PIPE_UNARY		4
@@ -24,31 +24,31 @@ RPD
 	var/id=-1
 	var/categoryId = CATEGORY_ATMOS
 	var/dir=SOUTH
-	var/dirtype=PIPE_BINARY
-	var/icon = 'icons/obj/pipe-item.dmi'
+	var/dirtype = PIPE_BENDABLE
+	var/icon = 'icons/obj/atmospherics/pipes/pipe_item.dmi'
 	var/icon_state=""
 	var/selected=0
 
-/datum/pipe_info/New(var/pid,var/direction,var/dt)
+/datum/pipe_info/New(pid,direction,dt)
 	src.id=pid
-	src.icon_state=pipeID2State[pid+1]
-	src.dir=direction
+	src.icon_state=GLOB.pipeID2State["[pid]"]
+	src.dir = direction
 	src.dirtype=dt
 
-/datum/pipe_info/proc/Render(var/dispenser,var/label)
+/datum/pipe_info/proc/Render(dispenser,label)
 	return "<li><a href='?src=\ref[dispenser];makepipe=[id];dir=[dir];type=[dirtype]'>[label]</a></li>"
 
 /datum/pipe_info/meter
-	icon = 'icons/obj/pipes.dmi'
+	icon = 'icons/obj/atmospherics/pipes/simple.dmi'
 	icon_state = "meterX"
 
 /datum/pipe_info/meter/New()
 	return
 
-/datum/pipe_info/meter/Render(var/dispenser,var/label)
+/datum/pipe_info/meter/Render(dispenser,label)
 	return "<li><a href='?src=\ref[dispenser];makemeter=1;type=[dirtype]'>[label]</a></li>" //hardcoding is no
 
-var/global/list/disposalpipeID2State=list(
+GLOBAL_LIST_INIT(disposalpipeID2State, list(
 	"pipe-s",
 	"pipe-c",
 	"pipe-j1",
@@ -59,30 +59,29 @@ var/global/list/disposalpipeID2State=list(
 	"outlet",
 	"intake",
 	"pipe-j1s",
-	"pipe-j2s"
-)
+	"pipe-j2s"))
 
 /datum/pipe_info/disposal
 	categoryId = CATEGORY_DISPOSALS
-	icon = 'icons/obj/pipes/disposal.dmi'
+	icon = 'icons/obj/atmospherics/pipes/disposal.dmi'
 	icon_state = "meterX"
 
 /datum/pipe_info/disposal/New(var/pid,var/dt)
 	src.id=pid
-	src.icon_state=disposalpipeID2State[pid+1]
-	src.dir=2
+	src.icon_state=GLOB.disposalpipeID2State[pid+1]
+	src.dir = SOUTH
 	src.dirtype=dt
 	if(pid<DISP_END_BIN || pid>DISP_END_CHUTE)
 		icon_state = "con[icon_state]"
 
-/datum/pipe_info/disposal/Render(var/dispenser,var/label)
+/datum/pipe_info/disposal/Render(dispenser,label)
 	return "<li><a href='?src=\ref[dispenser];dmake=[id];type=[dirtype]'>[label]</a></li>" //avoid hardcoding.
 
 //find these defines in code\game\machinery\pipe\consruction.dm
-var/global/list/RPD_recipes=list(
+GLOBAL_LIST_INIT(RPD_recipes, list(
 	"Regular Pipes" = list(
-		"Pipe"           = new /datum/pipe_info(PIPE_SIMPLE_STRAIGHT,	1, PIPE_BINARY),
-		"Bent Pipe"      = new /datum/pipe_info(PIPE_SIMPLE_BENT, 		5, PIPE_BENT),
+		"Pipe"           = new /datum/pipe_info(PIPE_SIMPLE,			1, PIPE_BENDABLE),
+		//"Bent Pipe"      = new /datum/pipe_info(PIPE_SIMPLE,	 		5, PIPE_BENT),
 		"Manifold"       = new /datum/pipe_info(PIPE_MANIFOLD, 			1, PIPE_TRINARY),
 		"Manual Valve"   = new /datum/pipe_info(PIPE_MVALVE, 			1, PIPE_BINARY),
 		"Digital Valve"  = new /datum/pipe_info(PIPE_DVALVE,			1, PIPE_BINARY),
@@ -101,52 +100,47 @@ var/global/list/RPD_recipes=list(
 //		"Injector"       = new /datum/pipe_info(PIPE_INJECTOR,     		1, PIPE_UNARY),
 	),
 	"Heat Exchange" = list(
-		"Pipe"           = new /datum/pipe_info(PIPE_HE_STRAIGHT,		1, PIPE_BINARY),
-		"Bent Pipe"      = new /datum/pipe_info(PIPE_HE_BENT,			5, PIPE_BENT),
+		"Pipe"           = new /datum/pipe_info(PIPE_HE,				1, PIPE_BENDABLE),
+		//"Bent Pipe"      = new /datum/pipe_info(PIPE_HE,				5, PIPE_BENT),
+		"Manifold"       = new /datum/pipe_info(PIPE_HE_MANIFOLD, 		1, PIPE_TRINARY),
+		"4-Way Manifold" = new /datum/pipe_info(PIPE_HE_4WAYMANIFOLD,	1, PIPE_QUAD),
 		"Junction"       = new /datum/pipe_info(PIPE_JUNCTION,			1, PIPE_UNARY),
 		"Heat Exchanger" = new /datum/pipe_info(PIPE_HEAT_EXCHANGE,		1, PIPE_UNARY),
-	),
-	"Insulated Pipes" = list(
-		"Pipe"           = new /datum/pipe_info(PIPE_INSULATED_STRAIGHT,1, PIPE_BINARY),
-		"Bent Pipe"      = new /datum/pipe_info(PIPE_INSULATED_BENT,	5, PIPE_BENT),
 	),
 	"Disposal Pipes" = list(
 		"Pipe"          = new /datum/pipe_info/disposal(DISP_PIPE_STRAIGHT,	PIPE_BINARY),
 		"Bent Pipe"     = new /datum/pipe_info/disposal(DISP_PIPE_BENT,		PIPE_TRINARY),
-		"Junction"      = new /datum/pipe_info/disposal(DISP_JUNCTION,			PIPE_TRINARY),
+		"Junction"      = new /datum/pipe_info/disposal(DISP_JUNCTION,		PIPE_TRINARY),
 		"Y-Junction"    = new /datum/pipe_info/disposal(DISP_YJUNCTION,		PIPE_TRINARY),
 		"Trunk"         = new /datum/pipe_info/disposal(DISP_END_TRUNK,		PIPE_TRINARY),
-		"Bin"           = new /datum/pipe_info/disposal(DISP_END_BIN,			PIPE_QUAD),
-		"Outlet"        = new /datum/pipe_info/disposal(DISP_END_OUTLET,		PIPE_UNARY),
+		"Bin"           = new /datum/pipe_info/disposal(DISP_END_BIN,		PIPE_QUAD),
+		"Outlet"        = new /datum/pipe_info/disposal(DISP_END_OUTLET,	PIPE_UNARY),
 		"Chute"         = new /datum/pipe_info/disposal(DISP_END_CHUTE,		PIPE_UNARY),
 		"Sort Junction" = new /datum/pipe_info/disposal(DISP_SORTJUNCTION,	PIPE_TRINARY),
 	)
-)
+))
 /obj/item/weapon/pipe_dispenser
 	name = "Rapid Piping Device (RPD)"
 	desc = "A device used to rapidly pipe things."
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/tools.dmi'
 	icon_state = "rpd"
-	opacity = 0
-	density = 0
-	anchored = 0.0
 	flags = CONDUCT
-	force = 10.0
-	throwforce = 10.0
+	force = 10
+	throwforce = 10
 	throw_speed = 1
 	throw_range = 5
-	w_class = 3.0
-	m_amt = 75000
-	g_amt = 37500
+	w_class = WEIGHT_CLASS_NORMAL
+	materials = list(MAT_METAL=75000, MAT_GLASS=37500)
 	origin_tech = "engineering=4;materials=2"
-	var/datum/effect/effect/system/spark_spread/spark_system
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0, fire = 100, acid = 50)
+	resistance_flags = FIRE_PROOF
+	var/datum/effect_system/spark_spread/spark_system
 	var/working = 0
-	var/p_type = 0
-	var/p_conntype = 0
+	var/p_type = PIPE_SIMPLE
+	var/p_conntype = PIPE_BENDABLE
 	var/p_dir = 1
 	var/p_flipped = 0
 	var/p_class = ATMOS_MODE
-	var/p_disposal = 0
 	var/list/paint_colors = list(
 		"grey"		= rgb(255,255,255),
 		"red"		= rgb(255,0,0),
@@ -161,21 +155,33 @@ var/global/list/RPD_recipes=list(
 
 /obj/item/weapon/pipe_dispenser/New()
 	. = ..()
-	spark_system = new /datum/effect/effect/system/spark_spread
+	spark_system = new /datum/effect_system/spark_spread
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 
-/obj/item/weapon/pipe_dispenser/attack_self(mob/user as mob)
+/obj/item/weapon/pipe_dispenser/Destroy()
+	qdel(spark_system)
+	spark_system = null
+	return ..()
+
+/obj/item/weapon/pipe_dispenser/attack_self(mob/user)
 	show_menu(user)
 
-/obj/item/weapon/pipe_dispenser/proc/render_dir_img(var/_dir,var/pic,var/title,var/flipped=0)
+/obj/item/weapon/pipe_dispenser/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] points the end of the RPD down [user.p_their()] throat and presses a button! It looks like [user.p_theyre()] trying to commit suicide...</span>")
+	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
+	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
+	return(BRUTELOSS)
+
+/obj/item/weapon/pipe_dispenser/proc/render_dir_img(_dir,pic,title,flipped=0)
 	var/selected=" class=\"imglink\""
 	if(_dir == p_dir)
 		selected=" class=\"imglink selected\""
 	return "<a href=\"?src=\ref[src];setdir=[_dir];flipped=[flipped]\" title=\"[title]\"[selected]\"><img src=\"[pic]\" /></a>"
 
-/obj/item/weapon/pipe_dispenser/proc/show_menu(mob/user as mob)
-	if(!user || !src)	return 0
+/obj/item/weapon/pipe_dispenser/proc/show_menu(mob/user)
+	if(!user || !src)
+		return 0
 	var/dat = {"<h2>Type</h2>
 <b>Utilities:</b>
 <ul>"}
@@ -195,11 +201,11 @@ var/global/list/RPD_recipes=list(
 	else if(screen == CATEGORY_DISPOSALS)
 		dat += "<A href='?src=\ref[src];screen=[CATEGORY_ATMOS];makepipe=0;dir=1;type=0'>Atmospherics</A> <span class='linkOn'>Disposals</span><BR>"
 	dat += "</ul>"
-	
+
 	var/icon/preview=null
 	var/datbuild = ""
-	for(var/category in RPD_recipes)
-		var/list/cat=RPD_recipes[category]
+	for(var/category in GLOB.RPD_recipes)
+		var/list/cat = GLOB.RPD_recipes[category]
 		for(var/label in cat)
 			var/datum/pipe_info/I = cat[label]
 			var/found=0
@@ -211,11 +217,11 @@ var/global/list/RPD_recipes=list(
 			if(found)
 				preview=new /icon(I.icon,I.icon_state)
 			if(screen == I.categoryId)
-				if(I.id == p_type)
+				if(I.id == p_type && p_class >= 0)
 					datbuild += "<span class='linkOn'>[label]</span>"
 				else
 					datbuild += I.Render(src,label)
-		
+
 		if(length(datbuild) > 0)
 			dat += "<b>[category]:</b><ul>"
 			dat += datbuild
@@ -266,14 +272,20 @@ var/global/list/RPD_recipes=list(
 			<a href="?src=\ref[src];setdir=4; flipped=0" title="horizontal">&harr;</a>
 		</p>
 				"}
-		if(PIPE_BENT) // Bent, N-W, N-E etc
+
+		if(PIPE_BENDABLE) // Bent, N-W, N-E etc
 			if(preview)
+				user << browse_rsc(new /icon(preview, dir=NORTH), "vertical.png")
+				user << browse_rsc(new /icon(preview, dir=EAST), "horizontal.png")
 				user << browse_rsc(new /icon(preview, dir=NORTHWEST),  "nw.png")
 				user << browse_rsc(new /icon(preview, dir=NORTHEAST),  "ne.png")
 				user << browse_rsc(new /icon(preview, dir=SOUTHWEST),  "sw.png")
 				user << browse_rsc(new /icon(preview, dir=SOUTHEAST),  "se.png")
 
 				dirsel += "<p>"
+				dirsel += render_dir_img(1,"vertical.png","Vertical")
+				dirsel += render_dir_img(4,"horizontal.png","Horizontal")
+				dirsel += "<br />"
 				dirsel += render_dir_img(9,"nw.png","West to North")
 				dirsel += render_dir_img(5,"ne.png","North to East")
 				dirsel += "<br />"
@@ -283,6 +295,9 @@ var/global/list/RPD_recipes=list(
 			else
 				dirsel+={"
 		<p>
+			<a href="?src=\ref[src];setdir=1; flipped=0" title="vertical">&#8597;</a>
+			<a href="?src=\ref[src];setdir=4; flipped=0" title="horizontal">&harr;</a>
+			<br />
 			<a href="?src=\ref[src];setdir=9; flipped=0" title="West to North">&#9565;</a>
 			<a href="?src=\ref[src];setdir=5; flipped=0" title="North to East">&#9562;</a>
 			<br />
@@ -354,7 +369,7 @@ var/global/list/RPD_recipes=list(
 			<a href="?src=\ref[src];setdir=10; flipped=1" title="South, East, North">&#9568;</a>
 		</p>
 				"}
-		if(PIPE_UNARY) // Unary
+		if(PIPE_UNARY) // Stuff with four directions - includes pumps etc.
 			if(preview)
 				user << browse_rsc(new /icon(preview, dir=NORTH), "n.png")
 				user << browse_rsc(new /icon(preview, dir=EAST),  "e.png")
@@ -400,17 +415,17 @@ var/global/list/RPD_recipes=list(
 		background:none;
 		margin: 1px;
 	}
-	
+
 	a.imglink:hover {
 		background:none;
 		color:none;
 	}
-	
+
 	a.imglink.selected img {
 		border: 1px solid #24722e;
 		background: #2f943c;
 	}
-	
+
 	a img {
 		border: 1px solid #161616;
 		background: #40628a;
@@ -447,7 +462,7 @@ var/global/list/RPD_recipes=list(
 	if(href_list["screen"])
 		screen = text2num(href_list["screen"])
 		show_menu(usr)
-	
+
 	if(href_list["setdir"])
 		p_dir= text2num(href_list["setdir"])
 		p_flipped = text2num(href_list["flipped"])
@@ -476,7 +491,7 @@ var/global/list/RPD_recipes=list(
 		show_menu(usr)
 
 	if(href_list["makepipe"])
-		p_type = text2num(href_list["makepipe"])
+		p_type = text2path(href_list["makepipe"])
 		p_dir = text2num(href_list["dir"])
 		p_conntype = text2num(href_list["type"])
 		p_class = ATMOS_MODE
@@ -502,101 +517,80 @@ var/global/list/RPD_recipes=list(
 		show_menu(usr)
 
 
-/obj/item/weapon/pipe_dispenser/afterattack(atom/A, mob/user)
-	if(!in_range(A,user) || loc != user)
-		return 0
+/obj/item/weapon/pipe_dispenser/pre_attackby(atom/A, mob/user)
+	if(!user.IsAdvancedToolUser() || istype(A,/turf/open/space/transit))
+		return ..()
 
-	if(!user.IsAdvancedToolUser())
-		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
-		return 0
+	//make sure what we're clicking is valid for the current mode
+	var/is_paintable = (p_class == PAINT_MODE && istype(A, /obj/machinery/atmospherics/pipe))
+	var/is_consumable = (p_class == EATING_MODE && (istype(A, /obj/item/pipe) || istype(A, /obj/item/pipe_meter) || istype(A, /obj/structure/disposalconstruct)))
+	var/can_make_pipe = ((p_class == ATMOS_MODE || p_class == METER_MODE || p_class == DISPOSALS_MODE) && isturf(A))
 
-	if(istype(A,/area/shuttle)||istype(A,/turf/space/transit))
-		return 0
-	
+	if(!is_paintable && !is_consumable && !can_make_pipe)
+		return ..()
+
 	//So that changing the menu settings doesn't affect the pipes already being built.
 	var/queued_p_type = p_type
 	var/queued_p_dir = p_dir
 	var/queued_p_flipped = p_flipped
-	
-	switch(p_class)
-		if(PAINT_MODE) // Paint pipes
-			if(!istype(A,/obj/machinery/atmospherics/pipe))
-				// Avoid spewing errors about invalid mode -2 when clicking on stuff that aren't pipes.
-				user << "<span class='warning'>\The [src]'s error light flickers!  Perhaps you need to only use it on pipes and pipe meters?</span>"
-				return 0
+
+	. = FALSE
+	switch(p_class) //if we've gotten this var, the target is valid
+		if(PAINT_MODE) //Paint pipes
 			var/obj/machinery/atmospherics/pipe/P = A
 			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-			P.color = paint_colors[paint_color]
+			P.add_atom_colour(paint_colors[paint_color], FIXED_COLOUR_PRIORITY)
 			P.pipe_color = paint_colors[paint_color]
-			P.stored.color = paint_colors[paint_color]
 			user.visible_message("<span class='notice'>[user] paints \the [P] [paint_color].</span>","<span class='notice'>You paint \the [P] [paint_color].</span>")
-			//P.update_icon()
 			P.update_node_icon()
-			return 1
-		if(EATING_MODE) // Eating pipes
-			// Must click on an actual pipe or meter.
-			if(istype(A,/obj/item/pipe) || istype(A,/obj/item/pipe_meter) || istype(A,/obj/structure/disposalconstruct))
-				user << "<span class='notice'>You start destroying pipe...</span>"
-				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-				if(do_after(user, 5))
-					activate()
-					qdel(A)
-					return 1
-				return 0
+			return
 
-			// Avoid spewing errors about invalid mode -1 when clicking on stuff that aren't pipes.
-			user << "<span class='warning'>The [src]'s error light flickers!  Perhaps you need to only use it on pipes and pipe meters?</span>"
-			return 0
-		if(ATMOS_MODE)
-			if(!(istype(A, /turf)))
-				user << "<span class='warning'>The [src]'s error light flickers!</span>"
-				return 0
-			user << "<span class='notice'>You start building pipes...</span>"
+		if(EATING_MODE) //Eating pipes
+			to_chat(user, "<span class='notice'>You start destroying a pipe...</span>")
 			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-			if(do_after(user, 20))
+			if(do_after(user, 2, target = A))
+				activate()
+				qdel(A)
+
+		if(ATMOS_MODE) //Making pipes
+			to_chat(user, "<span class='notice'>You start building a pipe...</span>")
+			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+			if(do_after(user, 2, target = A))
 				activate()
 				var/obj/item/pipe/P = new (A, pipe_type=queued_p_type, dir=queued_p_dir)
 				P.flipped = queued_p_flipped
 				P.update()
 				P.add_fingerprint(usr)
-				return 1
-			return 0
 
-		if(METER_MODE)
-			if(!(istype(A, /turf)))
-				user << "<span class='warning'>The [src]'s error light flickers!</span>"
-				return 0
-			user << "<span class='notice'>You start building meter...</span>"
+		if(METER_MODE) //Making pipe meters
+			to_chat(user, "<span class='notice'>You start building a meter...</span>")
 			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-			if(do_after(user, 20))
+			if(do_after(user, 2, target = A))
 				activate()
 				new /obj/item/pipe_meter(A)
-				return 1
-			return 0
 
-		if(DISPOSALS_MODE)
-			if(!(istype(A, /turf)))
-				user << "<span class='warning'>The [src]'s error light flickers!</span>"
-				return 0
-			user << "<span class='notice'>You start building pipes...</span>"
+		if(DISPOSALS_MODE) //Making disposals pipes
+			if(is_anchored_dense_turf(A))
+				to_chat(user, "<span class='warning'>The [src]'s error light flickers; there's something in the way!</span>")
+				return
+			to_chat(user, "<span class='notice'>You start building a disposals pipe...</span>")
 			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-			if(do_after(user, 20))
+			if(do_after(user, 4, target = A))
 				var/obj/structure/disposalconstruct/C = new (A, queued_p_type ,queued_p_dir)
 
 				if(!C.can_place())
-					user << "<span class='warning'>There's not enough room to build that here!</span>"
+					to_chat(user, "<span class='warning'>There's not enough room to build that here!</span>")
 					qdel(C)
-					return 0
+					return
 
 				activate()
 
 				C.add_fingerprint(usr)
-				C.update()
-				return 1
-			return 0
+				C.update_icon()
+				return
+
 		else
-			..()
-			return 0
+			return ..()
 
 
 /obj/item/weapon/pipe_dispenser/proc/activate()

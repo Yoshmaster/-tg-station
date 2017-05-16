@@ -10,7 +10,7 @@ Self-Respiration
 	Fatal Level.
 
 Bonus
-	The body generates salbutamol Plus.
+	The body generates salbutamol.
 
 //////////////////////////////////////
 */
@@ -24,15 +24,15 @@ Bonus
 	transmittable = -4
 	level = 6
 
-/datum/symptom/oxygen/Activate(var/datum/disease/advance/A)
+/datum/symptom/oxygen/Activate(datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB * 5))
-		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(4, 5)
-				if (M.reagents.get_reagent_amount("salbutamol") < 20)
-					M.reagents.add_reagent("salbutamol", 20)
-			else
-				if(prob(SYMPTOM_ACTIVATION_PROB * 5))
-					M << "<span class='notice'>[pick("Your lungs feel great.", "You are now breathing manually.", "You don't feel the need to breathe.")]</span>"
+	var/mob/living/M = A.affected_mob
+	switch(A.stage)
+		if(4, 5)
+			M.adjustOxyLoss(-3, 0)
+			if(M.losebreath >= 4)
+				M.losebreath -= 2
+		else
+			if(prob(SYMPTOM_ACTIVATION_PROB * 3))
+				to_chat(M, "<span class='notice'>[pick("Your lungs feel great.", "You realize you haven't been breathing.", "You don't feel the need to breathe.")]</span>")
 	return

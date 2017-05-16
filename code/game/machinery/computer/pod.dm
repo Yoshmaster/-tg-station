@@ -1,7 +1,6 @@
 /obj/machinery/computer/pod
 	name = "mass driver launch control"
 	desc = "A combined blastdoor and mass driver control unit."
-	icon_state = "computer_generic"
 	var/obj/machinery/mass_driver/connected = null
 	var/title = "Mass Driver Controls"
 	var/id = 1
@@ -10,11 +9,11 @@
 	var/range = 4
 
 
-/obj/machinery/computer/pod/initialize()
+/obj/machinery/computer/pod/Initialize()
+	..()
 	for(var/obj/machinery/mass_driver/M in range(range, src))
 		if(M.id == id)
 			connected = M
-	..()
 
 
 /obj/machinery/computer/pod/proc/alarm()
@@ -89,7 +88,7 @@
 /obj/machinery/computer/pod/Topic(href, href_list)
 	if(..())
 		return
-	if((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if(usr.contents.Find(src) || (in_range(src, usr) && isturf(loc)) || issilicon(usr))
 		usr.set_machine(src)
 		if(href_list["power"])
 			var/t = text2num(href_list["power"])
@@ -120,20 +119,22 @@
 
 
 /obj/machinery/computer/pod/old
-	icon_state = "old"
 	name = "\improper DoorMex control console"
 	title = "Door Controls"
+	icon_state = "oldcomp"
+	icon_screen = "library"
+	icon_keyboard = null
 
 
 /obj/machinery/computer/pod/old/syndicate
 	name = "\improper ProComp Executive IIc"
 	desc = "The Syndicate operate on a tight budget. Operates external airlocks."
 	title = "External Airlock Controls"
-	req_access = list(access_syndicate)
+	req_access = list(GLOB.access_syndicate)
 
 /obj/machinery/computer/pod/old/syndicate/attack_hand(mob/user)
 	if(!allowed(user))
-		user << "<span class='notice'>Access denied.</span>"
+		to_chat(user, "<span class='notice'>Access denied.</span>")
 		return
 	else
 		..()

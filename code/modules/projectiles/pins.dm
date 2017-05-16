@@ -4,8 +4,9 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "firing_pin"
 	item_state = "pen"
+	origin_tech = "materials=2;combat=4"
 	flags = CONDUCT
-	w_class = 1
+	w_class = WEIGHT_CLASS_TINY
 	attack_verb = list("poked")
 	var/emagged = 0
 	var/fail_message = "<span class='warning'>INVALID USER.</span>"
@@ -27,23 +28,24 @@
 			if(G.pin && (force_replace || G.pin.pin_removeable))
 				G.pin.loc = get_turf(G)
 				G.pin.gun_remove(user)
-				user << "<span class ='notice'>You remove [G]'s old pin.</span>"
+				to_chat(user, "<span class ='notice'>You remove [G]'s old pin.</span>")
 
 			if(!G.pin)
-				user.drop_item()
+				if(!user.temporarilyRemoveItemFromInventory(src))
+					return
 				gun_insert(user, G)
-				user << "<span class ='notice'>You insert [src] into [G].</span>"
+				to_chat(user, "<span class ='notice'>You insert [src] into [G].</span>")
 			else
-				user << "<span class ='notice'>This firearm already has a firing pin installed.</span>"
+				to_chat(user, "<span class ='notice'>This firearm already has a firing pin installed.</span>")
 
 /obj/item/device/firing_pin/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
-		user << "<span class='notice'>You override the authentication mechanism.</span>"
+		to_chat(user, "<span class='notice'>You override the authentication mechanism.</span>")
 
-/obj/item/device/firing_pin/proc/gun_insert(mob/living/user, var/obj/item/weapon/gun/G)
+/obj/item/device/firing_pin/proc/gun_insert(mob/living/user, obj/item/weapon/gun/G)
 	gun = G
-	loc = gun
+	forceMove(gun)
 	gun.pin = src
 	return
 
@@ -59,7 +61,7 @@
 	user.show_message(fail_message, 1)
 	if(selfdestruct)
 		user.show_message("<span class='danger'>SELF-DESTRUCTING...</span><br>", 1)
-		user << "<span class='userdanger'>Your [gun] explodes!</span>"
+		to_chat(user, "<span class='userdanger'>[gun] explodes!</span>")
 		explosion(get_turf(gun), -1, 0, 2, 3)
 		if(gun)
 			qdel(gun)
@@ -77,6 +79,7 @@
 	desc = "This safety firing pin allows weapons to be fired within proximity to a firing range."
 	fail_message = "<span class='warning'>TEST RANGE CHECK FAILED.</span>"
 	pin_removeable = 1
+	origin_tech = "combat=2;materials=2"
 
 /obj/item/device/firing_pin/test_range/pin_auth(mob/living/user)
 	for(var/obj/machinery/magnetic_controller/M in range(user, 3))
@@ -92,16 +95,17 @@
 	var/obj/item/weapon/implant/req_implant = null
 
 /obj/item/device/firing_pin/implant/pin_auth(mob/living/user)
-	for(var/obj/item/weapon/implant/I in user)
-		if(req_implant &&  I.imp_in == user && I.type == req_implant)
-			return 1
+	if(istype(user))
+		for(var/obj/item/weapon/implant/I in user.implants)
+			if(req_implant && I.type == req_implant)
+				return 1
 	return 0
 
-/obj/item/device/firing_pin/implant/loyalty
-	name = "loyalty firing pin"
-	desc = "This is a security firing pin which only authorizes users who are loyalty-implanted."
+/obj/item/device/firing_pin/implant/mindshield
+	name = "mindshield firing pin"
+	desc = "This Security firing pin authorizes the weapon for only mindshield-implanted users."
 	icon_state = "firing_pin_loyalty"
-	req_implant = /obj/item/weapon/implant/loyalty
+	req_implant = /obj/item/weapon/implant/mindshield
 
 /obj/item/device/firing_pin/implant/pindicate
 	name = "syndicate firing pin"
@@ -115,7 +119,7 @@
 /obj/item/device/firing_pin/clown
 	name = "hilarious firing pin"
 	desc = "Advanced clowntech that can convert any firearm into a far more useful object."
-	color = "yellow"
+	color = "#FFFF00"
 	fail_message = "<span class='warning'>HONK!</span>"
 	force_replace = 1
 
@@ -131,7 +135,7 @@
 		return 0
 	return 1
 
-/obj/item/device/firing_pin/clown/ultra/gun_insert(mob/living/user, var/obj/item/weapon/gun/G)
+/obj/item/device/firing_pin/clown/ultra/gun_insert(mob/living/user, obj/item/weapon/gun/G)
 	..()
 	G.clumsy_check = 0
 
@@ -149,7 +153,7 @@
 // When you want to keep your toys for youself.
 /obj/item/device/firing_pin/dna
 	name = "DNA-keyed firing pin"
-	desc = "This is a DNA-locked firing pin which only authorizes one user."
+	desc = "This is a DNA-locked firing pin which only authorizes one user. Attempt to fire once to DNA-link."
 	icon_state = "firing_pin_dna"
 	fail_message = "<span class='warning'>DNA CHECK FAILED.</span>"
 	var/unique_enzymes = null
@@ -160,7 +164,7 @@
 		var/mob/living/carbon/M = target
 		if(M.dna && M.dna.unique_enzymes)
 			unique_enzymes = M.dna.unique_enzymes
-			user << "<span class='notice'>DNA-LOCK SET.</span>"
+			to_chat(user, "<span class='notice'>DNA-LOCK SET.</span>")
 
 /obj/item/device/firing_pin/dna/pin_auth(mob/living/carbon/user)
 	if(istype(user) && user.dna && user.dna.unique_enzymes)
@@ -173,12 +177,12 @@
 	if(!unique_enzymes)
 		if(istype(user) && user.dna && user.dna.unique_enzymes)
 			unique_enzymes = user.dna.unique_enzymes
-			user << "<span class='notice'>DNA-LOCK SET.</span>"
+			to_chat(user, "<span class='notice'>DNA-LOCK SET.</span>")
 	else
 		..()
 
 /obj/item/device/firing_pin/dna/dredd
-	desc = "This is a DNA-locked firing pin which only authorizes one user. It has a small explosive charge on it."
+	desc = "This is a DNA-locked firing pin which only authorizes one user. Attempt to fire once to DNA-link. It has a small explosive charge on it."
 	selfdestruct = 1
 
 
@@ -188,21 +192,29 @@
 	desc = "A recreational firing pin, used in laser tag units to ensure users have their vests on."
 	fail_message = "<span class='warning'>SUIT CHECK FAILED.</span>"
 	var/obj/item/clothing/suit/suit_requirement = null
+	var/tagcolor = ""
 
 /obj/item/device/firing_pin/tag/pin_auth(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/M = user
 		if(istype(M.wear_suit, suit_requirement))
 			return 1
-	user << "<span class='warning'>You need to be wearing [suit_requirement.name]!</span>"
+	to_chat(user, "<span class='warning'>You need to be wearing [tagcolor] laser tag armor!</span>")
 	return 0
 
 /obj/item/device/firing_pin/tag/red
 	name = "red laser tag firing pin"
 	icon_state = "firing_pin_red"
 	suit_requirement = /obj/item/clothing/suit/redtag
+	tagcolor = "red"
 
 /obj/item/device/firing_pin/tag/blue
 	name = "blue laser tag firing pin"
 	icon_state = "firing_pin_blue"
 	suit_requirement = /obj/item/clothing/suit/bluetag
+	tagcolor = "blue"
+
+/obj/item/device/firing_pin/Destroy()
+	if(gun)
+		gun.pin = null
+	return ..()

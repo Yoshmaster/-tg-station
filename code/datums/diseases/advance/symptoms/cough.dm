@@ -25,16 +25,16 @@ BONUS
 	level = 1
 	severity = 1
 
-/datum/symptom/cough/Activate(var/datum/disease/advance/A)
+/datum/symptom/cough/Activate(datum/disease/advance/A)
 	..()
 	if(prob(SYMPTOM_ACTIVATION_PROB))
 		var/mob/living/M = A.affected_mob
 		switch(A.stage)
 			if(1, 2, 3)
-				M << "<span notice='notice'>[pick("You swallow excess mucus.", "You lightly cough.")]</span>"
+				to_chat(M, "<span notice='warning'>[pick("You swallow excess mucus.", "You lightly cough.")]</span>")
 			else
 				M.emote("cough")
-				var/obj/item/I = M.get_active_hand()
-				if(I && I.w_class == 1)
+				var/obj/item/I = M.get_active_held_item()
+				if(I && I.w_class == WEIGHT_CLASS_TINY)
 					M.drop_item()
 	return

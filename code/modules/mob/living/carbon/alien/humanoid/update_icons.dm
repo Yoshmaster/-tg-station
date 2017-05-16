@@ -1,18 +1,8 @@
-//Xeno Overlays Indexes//////////
-#define X_L_HAND_LAYER			1
-#define X_R_HAND_LAYER			2
-#define X_FIRE_LAYER			3
-#define X_TOTAL_LAYERS			3
-/////////////////////////////////
-
-/mob/living/carbon/alien/humanoid
-	var/list/overlays_standing[X_TOTAL_LAYERS]
 
 /mob/living/carbon/alien/humanoid/update_icons()
-	update_hud()		//TODO: remove the need for this to be here
-	overlays.Cut()
+	cut_overlays()
 	for(var/image/I in overlays_standing)
-		overlays += I
+		add_overlay(I)
 
 	if(stat == DEAD)
 		//If we mostly took damage from fire
@@ -28,10 +18,14 @@
 
 	else if(lying || resting || sleeping)
 		icon_state = "alien[caste]_sleep"
-	else if(m_intent == "run")
-		icon_state = "alien[caste]_running"
+	else if(mob_size == MOB_SIZE_LARGE)
+		icon_state = "alien[caste]"
+		if(drooling)
+			add_overlay("alienspit_[caste]")
 	else
-		icon_state = "alien[caste]_s"
+		icon_state = "alien[caste]"
+		if(drooling)
+			add_overlay("alienspit")
 
 	if(leaping)
 		if(alt_icon == initial(alt_icon))
@@ -48,17 +42,13 @@
 			alt_icon = old_icon
 		pixel_x = get_standard_pixel_x_offset(lying)
 		pixel_y = get_standard_pixel_y_offset(lying)
+	update_inv_hands()
+	update_inv_handcuffed()
 
 /mob/living/carbon/alien/humanoid/regenerate_icons()
-	..()
-	if (notransform)	return
-
-	update_inv_r_hand(0)
-	update_inv_l_hand(0)
-	update_hud()
-//	update_icons() //Handled in update_transform(), leaving this here as a reminder
-	update_fire()
-	update_transform()
+	if(!..())
+	//	update_icons() //Handled in update_transform(), leaving this here as a reminder
+		update_transform()
 
 /mob/living/carbon/alien/humanoid/update_transform() //The old method of updating lying/standing was update_icons(). Aliens still expect that.
 	if(lying > 0)
@@ -66,48 +56,40 @@
 	..()
 	update_icons()
 
+/mob/living/carbon/alien/humanoid/update_inv_handcuffed()
+	remove_overlay(HANDCUFF_LAYER)
+	var/cuff_icon = "aliencuff"
+	var/dmi_file = 'icons/mob/alien.dmi'
 
+	if(mob_size == MOB_SIZE_LARGE)
+		cuff_icon = "aliencuff_[caste]"
+		dmi_file = 'icons/mob/alienqueen.dmi'
 
-/mob/living/carbon/alien/humanoid/update_hud()
-	if(client)
-		client.screen |= contents
+	if(handcuffed)
+		overlays_standing[HANDCUFF_LAYER] = image(dmi_file,icon_state= cuff_icon, layer =-HANDCUFF_LAYER)
+		apply_overlay(HANDCUFF_LAYER)
 
+//Royals have bigger sprites, so inhand things must be handled differently.
+/mob/living/carbon/alien/humanoid/royal/update_inv_hands()
+	..()
+	remove_overlay(HANDS_LAYER)
+	var/list/hands = list()
 
-/mob/living/carbon/alien/humanoid/update_inv_r_hand(update_icons = 1)
-	if(r_hand)
-		var/t_state = r_hand.item_state
-		if(!t_state)
-			t_state = r_hand.icon_state
-		r_hand.screen_loc = ui_rhand
-		overlays_standing[X_R_HAND_LAYER]	= image("icon" = r_hand.righthand_file, "icon_state" = t_state)
-	else
-		overlays_standing[X_R_HAND_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/alien/humanoid/update_inv_l_hand(update_icons = 1)
+	var/obj/item/l_hand = get_item_for_held_index(1)
 	if(l_hand)
-		var/t_state = l_hand.item_state
-		if(!t_state)
-			t_state = l_hand.icon_state
-		l_hand.screen_loc = ui_lhand
-		overlays_standing[X_L_HAND_LAYER]	= image("icon" = l_hand.lefthand_file, "icon_state" = t_state)
-	else
-		overlays_standing[X_L_HAND_LAYER]	= null
-	if(update_icons)
-		update_icons()
+		var/itm_state = l_hand.item_state
+		if(!itm_state)
+			itm_state = l_hand.icon_state
+		var/image/I = image("icon" = alt_inhands_file , "icon_state"="[itm_state][caste]_l", "layer"=-HANDS_LAYER)
+		hands += I
 
-/mob/living/carbon/alien/humanoid/update_fire()
-	overlays -= overlays_standing[X_FIRE_LAYER]
-	if(on_fire)
-		overlays_standing[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing", "layer"= -X_FIRE_LAYER)
-		overlays += overlays_standing[X_FIRE_LAYER]
-		return
-	else
-		overlays_standing[X_FIRE_LAYER] = null
+	var/obj/item/r_hand = get_item_for_held_index(2)
+	if(r_hand)
+		var/itm_state = r_hand.item_state
+		if(!itm_state)
+			itm_state = r_hand.icon_state
+		var/image/I = image("icon" = alt_inhands_file , "icon_state"="[itm_state][caste]_r", "layer"=-HANDS_LAYER)
+		hands += I
 
-//Xeno Overlays Indexes//////////
-#undef X_L_HAND_LAYER
-#undef X_R_HAND_LAYER
-#undef X_FIRE_LAYER
-#undef X_TOTAL_LAYERS
+	overlays_standing[HANDS_LAYER] = hands
+	apply_overlay(HANDS_LAYER)

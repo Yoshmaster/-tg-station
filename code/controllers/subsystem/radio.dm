@@ -1,15 +1,11 @@
-var/datum/subsystem/radio/radio_controller
-
-/datum/subsystem/radio
+SUBSYSTEM_DEF(radio)
 	name = "Radio"
-	priority = 18
+	init_order = 18
+	flags = SS_NO_FIRE|SS_NO_INIT
 
 	var/list/datum/radio_frequency/frequencies = list()
 
-/datum/subsystem/radio/New()
-	NEW_SS_GLOBAL(radio_controller)
-
-/datum/subsystem/radio/proc/add_object(obj/device as obj, var/new_frequency as num, var/filter = null as text|null)
+/datum/controller/subsystem/radio/proc/add_object(obj/device, new_frequency as num, filter = null as text|null)
 	var/f_text = num2text(new_frequency)
 	var/datum/radio_frequency/frequency = frequencies[f_text]
 
@@ -21,7 +17,7 @@ var/datum/subsystem/radio/radio_controller
 	frequency.add_listener(device, filter)
 	return frequency
 
-/datum/subsystem/radio/proc/remove_object(obj/device, old_frequency)
+/datum/controller/subsystem/radio/proc/remove_object(obj/device, old_frequency)
 	var/f_text = num2text(old_frequency)
 	var/datum/radio_frequency/frequency = frequencies[f_text]
 
@@ -29,12 +25,12 @@ var/datum/subsystem/radio/radio_controller
 		frequency.remove_listener(device)
 
 		if(frequency.devices.len == 0)
-			del(frequency)
+			qdel(frequency)
 			frequencies -= f_text
 
 	return 1
 
-/datum/subsystem/radio/proc/return_frequency(var/new_frequency as num)
+/datum/controller/subsystem/radio/proc/return_frequency(new_frequency as num)
 	var/f_text = num2text(new_frequency)
 	var/datum/radio_frequency/frequency = frequencies[f_text]
 

@@ -18,14 +18,14 @@ Contents:
 	item_state = "s-ninja_suit"
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_box,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/restraints/handcuffs,/obj/item/weapon/tank/internals,/obj/item/weapon/stock_parts/cell)
 	slowdown = 0
-	unacidable = 1
-	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	resistance_flags = LAVA_PROOF | ACID_PROOF
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30, fire = 100, acid = 100)
 	strip_delay = 12
 
 		//Important parts of the suit.
 	var/mob/living/carbon/human/affecting = null
 	var/obj/item/weapon/stock_parts/cell/cell
-	var/datum/effect/effect/system/spark_spread/spark_system
+	var/datum/effect_system/spark_spread/spark_system
 	var/list/reagent_list = list("omnizine","salbutamol","spaceacillin","charcoal","nutriment","radium","potass_iodide")//The reagents ids which are added to the suit at New().
 	var/list/stored_research = list()//For stealing station research.
 	var/obj/item/weapon/disk/tech_disk/t_disk//To copy design onto disk.
@@ -39,11 +39,11 @@ Contents:
 		//Main function variables.
 	var/s_initialized = 0//Suit starts off.
 	var/s_coold = 0//If the suit is on cooldown. Can be used to attach different cooldowns to abilities. Ticks down every second based on suit ntick().
-	var/s_cost = 5.0//Base energy cost each ntick.
-	var/s_acost = 25.0//Additional cost for additional powers active.
-	var/s_delay = 40.0//How fast the suit does certain things, lower is faster. Can be overridden in specific procs. Also determines adverse probability.
-	var/a_transfer = 20.0//How much reagent is transferred when injecting.
-	var/r_maxamount = 80.0//How much reagent in total there is.
+	var/s_cost = 5//Base energy cost each ntick.
+	var/s_acost = 25//Additional cost for additional powers active.
+	var/s_delay = 40//How fast the suit does certain things, lower is faster. Can be overridden in specific procs. Also determines adverse probability.
+	var/a_transfer = 20//How much reagent is transferred when injecting.
+	var/r_maxamount = 80//How much reagent in total there is.
 
 		//Support function variables.
 	var/spideros = 0//Mode of SpiderOS. This can change so I won't bother listing the modes here (0 is hub). Check ninja_equipment.dm for how it all works.
@@ -51,8 +51,8 @@ Contents:
 	var/s_busy = 0//Is the suit busy with a process? Like AI hacking. Used for safety functions.
 
 		//Ability function variables.
-	var/s_bombs = 10.0//Number of starting ninja smoke bombs.
-	var/a_boost = 3.0//Number of adrenaline boosters.
+	var/s_bombs = 10//Number of starting ninja smoke bombs.
+	var/a_boost = 3//Number of adrenaline boosters.
 
 
 /obj/item/clothing/suit/space/space_ninja/New()
@@ -66,7 +66,7 @@ Contents:
 
 	//Research Init
 	stored_research = new()
-	for(var/T in typesof(/datum/tech) - /datum/tech)//Store up on research.
+	for(var/T in subtypesof(/datum/tech))//Store up on research.
 		stored_research += new T(src)
 
 	//Reagent Init
@@ -81,13 +81,14 @@ Contents:
 	//Cell Init
 	cell = new/obj/item/weapon/stock_parts/cell/high
 	cell.charge = 9000
-
+	cell.name = "black power cell"
+	cell.icon_state = "bscell"
 
 
 /obj/item/clothing/suit/space/space_ninja/Destroy()
 	if(affecting)
 		affecting << browse(null, "window=hack spideros")
-	..()
+	return ..()
 
 
 //Simply deletes all the attachments and self, killing all related procs.
@@ -108,7 +109,7 @@ Contents:
 
 
 //This proc prevents the suit from being taken off.
-/obj/item/clothing/suit/space/space_ninja/proc/lock_suit(mob/living/carbon/human/H, var/checkIcons = 0)
+/obj/item/clothing/suit/space/space_ninja/proc/lock_suit(mob/living/carbon/human/H, checkIcons = 0)
 	if(!istype(H))
 		return 0
 	if(checkIcons)
@@ -117,17 +118,17 @@ Contents:
 		H.gloves.item_state = "s-ninjan"
 	else
 		if(H.mind.special_role!="Space Ninja")
-			H << "\red <B>fÄTaL ÈÈRRoR</B>: 382200-*#00CÖDE <B>RED</B>\nUNAUHORIZED USÈ DETÈCeD\nCoMMÈNCING SUB-R0UIN3 13...\nTÈRMInATING U-U-USÈR..."
+			to_chat(H, "\red <B>fÄTaL ÈÈRRoR</B>: 382200-*#00CÖDE <B>RED</B>\nUNAUHORIZED USÈ DETÈCeD\nCoMMÈNCING SUB-R0UIN3 13...\nTÈRMInATING U-U-USÈR...")
 			H.gib()
 			return 0
 		if(!istype(H.head, /obj/item/clothing/head/helmet/space/space_ninja))
-			H << "<span class='userdanger'>ERROR</span>: 100113 UNABLE TO LOCATE HEAD GEAR\nABORTING..."
+			to_chat(H, "<span class='userdanger'>ERROR</span>: 100113 UNABLE TO LOCATE HEAD GEAR\nABORTING...")
 			return 0
 		if(!istype(H.shoes, /obj/item/clothing/shoes/space_ninja))
-			H << "<span class='userdanger'>ERROR</span>: 122011 UNABLE TO LOCATE FOOT GEAR\nABORTING..."
+			to_chat(H, "<span class='userdanger'>ERROR</span>: 122011 UNABLE TO LOCATE FOOT GEAR\nABORTING...")
 			return 0
 		if(!istype(H.gloves, /obj/item/clothing/gloves/space_ninja))
-			H << "<span class='userdanger'>ERROR</span>: 110223 UNABLE TO LOCATE HAND GEAR\nABORTING..."
+			to_chat(H, "<span class='userdanger'>ERROR</span>: 110223 UNABLE TO LOCATE HAND GEAR\nABORTING...")
 			return 0
 
 		affecting = H
@@ -167,7 +168,7 @@ Contents:
 	..()
 	if(s_initialized)
 		if(user == affecting)
-			user << "All systems operational. Current energy capacity: <B>[cell.charge]</B>."
-			user << "The CLOAK-tech device is <B>[s_active?"active":"inactive"]</B>."
-			user << "There are <B>[s_bombs]</B> smoke bomb\s remaining."
-			user << "There are <B>[a_boost]</B> adrenaline booster\s remaining."
+			to_chat(user, "All systems operational. Current energy capacity: <B>[cell.charge]</B>.")
+			to_chat(user, "The CLOAK-tech device is <B>[s_active?"active":"inactive"]</B>.")
+			to_chat(user, "There are <B>[s_bombs]</B> smoke bomb\s remaining.")
+			to_chat(user, "There are <B>[a_boost]</B> adrenaline booster\s remaining.")

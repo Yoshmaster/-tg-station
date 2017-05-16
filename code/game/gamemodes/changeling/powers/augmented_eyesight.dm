@@ -3,24 +3,35 @@
 
 /obj/effect/proc_holder/changeling/augmented_eyesight
 	name = "Augmented Eyesight"
-	desc = "Creates heat receptors in our eyes and dramatically increases light sensing ability."
-	helptext = "Grants us night vision and thermal vision. It may be toggled on or off. We will become more vulnerable to flash-based devices while active."
+	desc = "Creates heat receptors in our eyes and dramatically increases light sensing ability, or protects your vision from flashes."
+	helptext = "Grants us thermal vision or flash protection. We will become a lot more vulnerable to flash-based devices while thermal vision is active."
 	chemical_cost = 0
 	dna_cost = 2 //Would be 1 without thermal vision
-	var/active = 0 //Whether or not vision is enhanced
+	active = 0 //Whether or not vision is enhanced
 
-/obj/effect/proc_holder/changeling/augmented_eyesight/sting_action(var/mob/user)
-	active = !active
-	if(active)
-		user << "<span class='notice'>We feel a minute twitch in our eyes, and darkness creeps away.</span>"
-		user.weakeyes = 1
+/obj/effect/proc_holder/changeling/augmented_eyesight/sting_action(mob/living/carbon/human/user)
+	if(!istype(user))
+		return
+	var/obj/item/organ/eyes/E = user.getorganslot("eye_sight")
+	if(E)
+		if(E.flash_protect)
+			E.sight_flags |= SEE_MOBS
+			E.flash_protect = -1
+			to_chat(user, "We adjust our eyes to sense prey through walls.")
+		else
+			E.sight_flags -= SEE_MOBS
+			E.flash_protect = 2
+			to_chat(user, "We adjust our eyes to protect them from bright lights.")
+		user.update_sight()
 	else
-		user << "<span class='notice'>Our vision dulls. Shadows gather.</span>"
-		user.sight -= SEE_MOBS
-		user.weakeyes = 0
-	while(active)
-		user.see_in_dark = 8
-		user.see_invisible = 2
-		user.sight |= SEE_MOBS
-		sleep(1) //BAD THINGS HAPPEN WITHOUT THIS.
+		to_chat(user, "We can't adjust our eyes if we don't have any!")
+
+
+
 	return 1
+
+
+/obj/effect/proc_holder/changeling/augmented_eyesight/on_refund(mob/user)
+	var/obj/item/organ/eyes/E = user.getorganslot("eye_sight")
+	if(E)
+		E.sight_flags -= SEE_MOBS

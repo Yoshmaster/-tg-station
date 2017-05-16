@@ -22,6 +22,14 @@
 	item_color = "ek"
 	can_adjust = 0
 
+/obj/item/clothing/under/scratch
+	name = "white suit"
+	desc = "A white suit, suitable for an excellent host"
+	icon_state = "scratch"
+	item_state = "scratch"
+	item_color = "scratch"
+	can_adjust = 0
+
 /obj/item/clothing/under/sl_suit
 	desc = "It's a very amish looking suit."
 	name = "amish suit"
@@ -37,6 +45,7 @@
 	item_state = "armor"
 	can_adjust = 0
 	strip_delay = 100
+	resistance_flags = 0
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
@@ -54,6 +63,7 @@
 	item_color = "prisoner"
 	has_sensor = 2
 	sensor_mode = 3
+	random_sensor = 0
 
 /obj/item/clothing/under/rank/mailman
 	name = "mailman's jumpsuit"
@@ -69,13 +79,20 @@
 	item_state = "p_suit"
 	item_color = "psyche"
 
-/obj/item/clothing/under/sexyclown
+/obj/item/clothing/under/rank/clown/sexy
 	name = "sexy-clown suit"
 	desc = "It makes you look HONKable!"
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
 	item_color = "sexyclown"
-	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 0
+
+/obj/item/clothing/under/jabroni
+	name = "Jabroni Outfit"
+	desc = "The leather club is two sectors down."
+	icon_state = "darkholme"
+	item_state = "darkholme"
+	item_color = "darkholme"
 	can_adjust = 0
 
 /obj/item/clothing/under/rank/vice
@@ -92,6 +109,7 @@
 	icon_state = "officer"
 	item_state = "g_suit"
 	item_color = "officer"
+	alt_covers_chest = 1
 
 /obj/item/clothing/under/rank/centcom_commander
 	desc = "It's a jumpsuit worn by Centcom's highest-tier Commanders."
@@ -106,7 +124,7 @@
 	icon_state = "black"
 	item_state = "bl_suit"
 	item_color = "black"
-	w_class = 4//bulky item
+	w_class = WEIGHT_CLASS_BULKY
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
@@ -115,6 +133,7 @@
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	can_adjust = 0
+	resistance_flags = 0
 
 /obj/item/clothing/under/acj
 	name = "administrative cybernetic jumpsuit"
@@ -125,12 +144,13 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
-	armor = list(melee = 100, bullet = 100, laser = 100,energy = 100, bomb = 100, bio = 100, rad = 100)
+	armor = list(melee = 100, bullet = 100, laser = 100,energy = 100, bomb = 100, bio = 100, rad = 100, fire = 100, acid = 100)
 	cold_protection = CHEST | GROIN | LEGS | FEET | ARMS | HANDS
 	min_cold_protection_temperature = SPACE_SUIT_MIN_TEMP_PROTECT
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	can_adjust = 0
+	resistance_flags = FIRE_PROOF | ACID_PROOF
 
 /obj/item/clothing/under/owl
 	name = "owl uniform"
@@ -144,14 +164,6 @@
 	desc = "A soft brown jumpsuit with a white feather collar made of synthetic feathers and a lust for mayhem."
 	icon_state = "griffin"
 	item_color = "griffin"
-	can_adjust = 0
-
-/obj/item/clothing/under/rainbow
-	name = "rainbow"
-	desc = "rainbow"
-	icon_state = "rainbow"
-	item_state = "rainbow"
-	item_color = "rainbow"
 	can_adjust = 0
 
 /obj/item/clothing/under/cloud
@@ -243,12 +255,19 @@
 
 /obj/item/clothing/under/suit_jacket/white
 	name = "white suit"
-	desc = "A white suit and jacket with a black shirt. You wanna play rough? OKAY!."
+	desc = "A white suit and jacket with a blue shirt. You wanna play rough? OKAY!."
 	icon_state = "white_suit"
 	item_state = "white_suit"
 	item_color = "white_suit"
 
-/obj/item/clothing/under/blackskirt
+/obj/item/clothing/under/burial
+	name = "burial garments"
+	desc = "Traditional burial garments from the early 22nd century."
+	icon_state = "burial"
+	item_state = "burial"
+	item_color = "burial"
+
+/obj/item/clothing/under/skirt/black
 	name = "black skirt"
 	desc = "A black skirt, very fancy!"
 	icon_state = "blackskirt"
@@ -256,6 +275,37 @@
 	body_parts_covered = CHEST|GROIN|ARMS
 	fitted = FEMALE_UNIFORM_TOP
 	can_adjust = 0
+
+/obj/item/clothing/under/skirt/blue
+	name = "blue skirt"
+	desc = "A blue, casual skirt."
+	icon_state = "blueskirt"
+	item_color = "blueskirt"
+	item_state = "b_suit"
+	body_parts_covered = CHEST|GROIN|ARMS
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 0
+
+/obj/item/clothing/under/skirt/red
+	name = "red skirt"
+	desc = "A red, casual skirt."
+	icon_state = "redskirt"
+	item_color = "redskirt"
+	item_state = "r_suit"
+	body_parts_covered = CHEST|GROIN|ARMS
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 0
+
+/obj/item/clothing/under/skirt/purple
+	name = "purple skirt"
+	desc = "A purple, casual skirt."
+	icon_state = "purpleskirt"
+	item_color = "purpleskirt"
+	item_state = "p_suit"
+	body_parts_covered = CHEST|GROIN|ARMS
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 0
+
 
 /obj/item/clothing/under/schoolgirl
 	name = "blue schoolgirl uniform"
@@ -327,6 +377,10 @@
 	fitted = FEMALE_UNIFORM_TOP
 	can_adjust = 0
 
+/obj/item/clothing/under/kilt/highlander
+	desc = "You're the only one worthy of this kilt."
+	flags = NODROP
+
 /obj/item/clothing/under/sexymime
 	name = "sexy mime outfit"
 	desc = "The only time when you DON'T enjoy looking at someone's rack."
@@ -346,6 +400,11 @@
 	body_parts_covered = CHEST|GROIN|ARMS
 	fitted = NO_FEMALE_UNIFORM
 	can_adjust = 0
+	resistance_flags = 0
+
+/obj/item/clothing/under/gladiator/ash_walker
+	desc = "This gladiator uniform appears to be covered in ash and fairly dated."
+	has_sensor = 0
 
 /obj/item/clothing/under/sundress
 	name = "sundress"
@@ -454,6 +513,7 @@
 	item_color = "plaid_red"
 	fitted = FEMALE_UNIFORM_TOP
 	can_adjust = 1
+	alt_covers_chest = 1
 
 /obj/item/clothing/under/plaid_skirt/blue
 	name = "blue plaid skirt"
@@ -461,6 +521,9 @@
 	icon_state = "plaid_blue"
 	item_state = "plaid_blue"
 	item_color = "plaid_blue"
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 1
+	alt_covers_chest = 1
 
 /obj/item/clothing/under/plaid_skirt/purple
 	name = "purple plaid skirt"
@@ -468,6 +531,39 @@
 	icon_state = "plaid_purple"
 	item_state = "plaid_purple"
 	item_color = "plaid_purple"
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 1
+	alt_covers_chest = 1
+
+/obj/item/clothing/under/singery
+	name = "yellow performer's outfit"
+	desc = "Just looking at this makes you want to sing."
+	icon_state = "ysing"
+	item_state = "ysing"
+	item_color = "ysing"
+	fitted = NO_FEMALE_UNIFORM
+	alternate_worn_layer = ABOVE_SHOES_LAYER
+	can_adjust = 0
+
+/obj/item/clothing/under/singerb
+	name = "blue performer's outfit"
+	desc = "Just looking at this makes you want to sing."
+	icon_state = "bsing"
+	item_state = "bsing"
+	item_color = "bsing"
+	alternate_worn_layer = ABOVE_SHOES_LAYER
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 0
+
+/obj/item/clothing/under/plaid_skirt/green
+	name = "green plaid skirt"
+	desc = "A preppy green skirt with a white blouse."
+	icon_state = "plaid_green"
+	item_state = "plaid_green"
+	item_color = "plaid_green"
+	fitted = FEMALE_UNIFORM_TOP
+	can_adjust = 1
+	alt_covers_chest = 1
 
 /obj/item/clothing/under/jester
 	name = "jester suit"
@@ -475,3 +571,86 @@
 	icon_state = "jester"
 	item_color = "jester"
 	can_adjust = 0
+
+/obj/item/clothing/under/geisha
+	name = "geisha suit"
+	desc = "Cute space ninja senpai not included."
+	icon_state = "geisha"
+	item_color = "geisha"
+	can_adjust = 0
+
+/obj/item/clothing/under/villain
+	name = "villain suit"
+	desc = "A change of wardrobe is necessary if you ever want to catch a real superhero."
+	icon_state = "villain"
+	item_color = "villain"
+	can_adjust = 0
+
+/obj/item/clothing/under/sailor
+	name = "sailor suit"
+	desc = "Skipper's in the wardroom drinkin gin'."
+	icon_state = "sailor"
+	item_state = "b_suit"
+	item_color = "sailor"
+	can_adjust = 0
+
+/obj/item/clothing/under/plasmaman
+	name = "plasma envirosuit"
+	desc = "A special containment suit that allows plasma-based lifeforms to exist safely in an oxygenated environment, and automatically extinguishes them in a crisis. Despite being airtight, it's not spaceworthy."
+	icon_state = "plasmaman"
+	item_state = "plasmaman"
+	item_color = "plasmaman"
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 100, rad = 0, fire = 95, acid = 95)
+	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	can_adjust = 0
+	strip_delay = 80
+	var/next_extinguish = 0
+	var/extinguish_cooldown = 100
+	var/extinguishes_left = 5
+
+
+/obj/item/clothing/under/plasmaman/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>There are [extinguishes_left] extinguisher charges left in this suit.</span>")
+
+
+/obj/item/clothing/under/plasmaman/proc/Extinguish(mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+
+	if(H.on_fire)
+		if(extinguishes_left)
+			if(next_extinguish > world.time)
+				return
+			next_extinguish = world.time + extinguish_cooldown
+			extinguishes_left--
+			H.visible_message("<span class='warning'>[H]'s suit automatically extinguishes them!</span>","<span class='warning'>Your suit automatically extinguishes you.</span>")
+			H.ExtinguishMob()
+			new /obj/effect/particle_effect/water(get_turf(H))
+	return 0
+
+/obj/item/clothing/under/plasmaman/attackby(obj/item/E, mob/user, params)
+	if (istype(E, /obj/item/device/extinguisher_refill))
+		if (extinguishes_left == 5)
+			to_chat(user, "<span class='notice'>The inbuilt extinguisher is full.</span>")
+			return
+		else
+			extinguishes_left = 5
+			to_chat(user, "<span class='notice'>You refill the suit's built-in extinguisher, using up the cartridge.</span>")
+			qdel(E)
+			return
+		return
+	return
+
+/obj/item/device/extinguisher_refill
+	name = "envirosuit extinguisher cartridge"
+	desc = "A cartridge loaded with a compressed extinguisher mix, used to refill the automatic extinguisher on plasma envirosuits."
+	icon_state = "plasmarefill"
+	origin_tech = "materials=2;plasmatech=3;biotech=1"
+
+/obj/item/clothing/under/rank/security/navyblue/russian
+	name = "russian officer's uniform"
+	desc = "The latest in fashionable russian outfits."
+	icon_state = "hostanclothes"
+	item_state = "hostanclothes"
+	item_color = "hostanclothes"
